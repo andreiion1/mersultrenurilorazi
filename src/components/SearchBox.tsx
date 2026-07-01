@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { searchStations, majorOptions, type StationOpt } from "@/lib/stationSearch";
+import { searchStations, allOptions, type StationOpt } from "@/lib/stationSearch";
 
 type Opt = StationOpt;
 
@@ -23,7 +23,7 @@ function StationField({ label, value, onPick, placeholder, dark }: {
 }) {
   const [q, setQ] = useState(value?.name ?? "");
   const [open, setOpen] = useState(false);
-  const [opts, setOpts] = useState<Opt[]>(majorOptions.slice(0, 8));
+  const [opts, setOpts] = useState<Opt[]>(allOptions);
   const abortRef = useRef<AbortController | null>(null);
 
   // Sincronizeaza q cu valoarea externa (ex: dupa swap)
@@ -36,7 +36,7 @@ function StationField({ label, value, onPick, placeholder, dark }: {
     abortRef.current = ctrl;
 
     const timer = setTimeout(async () => {
-      const results = await searchStations(q, 8);
+      const results = await searchStations(q, 50);
       if (!ctrl.signal.aborted) setOpts(results);
     }, q.trim() ? 180 : 0);
 
@@ -70,7 +70,7 @@ function StationField({ label, value, onPick, placeholder, dark }: {
         />
         {q && (
           <button type="button" aria-label="Sterge"
-            onClick={() => { setQ(""); onPick(null); setOpts(majorOptions.slice(0, 8)); }}
+            onClick={() => { setQ(""); onPick(null); setOpts(allOptions); }}
             style={{ color: dark ? "rgba(255,255,255,0.3)" : "var(--text-muted)", flexShrink: 0 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

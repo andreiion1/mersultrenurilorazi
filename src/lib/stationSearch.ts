@@ -19,16 +19,20 @@ const PREP = INDEX.map((e) => ({ e, nn: norm(e.n), nc: norm(e.c) }));
 
 const toOpt = (e: Entry): StationOpt => ({ slug: e.s, name: e.n, city: e.c });
 
-/** Gari mari pentru starea goala a dropdown-ului. */
+// INDEX e deja sortat: gari mari (rank 0) -> normale (1) -> halte (2), apoi alfabetic.
+/** Gari mari (rank 0). */
 export const majorOptions: StationOpt[] = INDEX.filter((e) => e.r === 0).map(toOpt);
+/** TOATE garile, sortate: orase mari intai, apoi restul. Pentru starea goala a dropdown-ului. */
+export const allOptions: StationOpt[] = INDEX.map(toOpt);
 
 /**
- * Cautare gari (sincron). Fara text -> gari mari. Cu text -> potriviri,
- * cu garile mari si potrivirile pe prefix prioritizate.
+ * Cautare gari (sincron).
+ * Fara text -> TOATE garile (orase mari intai, apoi restul) — lista scrollabila.
+ * Cu text -> potriviri, cu garile mari si potrivirile pe prefix prioritizate.
  */
-export function searchStations(q: string, limit = 8): StationOpt[] {
+export function searchStations(q: string, limit = 50): StationOpt[] {
   const n = norm(q);
-  if (!n) return majorOptions.slice(0, limit);
+  if (!n) return allOptions; // lista completa, deja sortata mare -> mic
   const scored: { e: Entry; score: number }[] = [];
   for (const { e, nn, nc } of PREP) {
     const inName = nn.includes(n);
