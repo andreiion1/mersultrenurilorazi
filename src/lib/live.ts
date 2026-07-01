@@ -14,6 +14,16 @@ export interface TrainPosition {
   nextStation: string;
   delayMin: number;
   state: "on_time" | "delayed";
+  bearing: number; // direcția de deplasare, grade 0-360 (0 = nord, 90 = est)
+}
+
+/** Azimutul (direcția) inițial de la punctul A la B, în grade 0-360. */
+function bearingDeg(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const p1 = toRad(aLat), p2 = toRad(bLat), dl = toRad(bLng - aLng);
+  const y = Math.sin(dl) * Math.cos(p2);
+  const x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dl);
+  return (Math.atan2(y, x) * 180) / Math.PI;
 }
 
 /**
@@ -71,6 +81,7 @@ export function liveTrainPositions(nowMin?: number, dateISO?: string): TrainPosi
       nextStation: b.name,
       delayMin: status.state === "delayed" ? status.delayMin : 0,
       state: status.state === "delayed" ? "delayed" : "on_time",
+      bearing: (bearingDeg(a.lat, a.lng, b.lat, b.lng) + 360) % 360,
     });
   }
   return out;

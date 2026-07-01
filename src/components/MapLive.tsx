@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 interface GeoStation { slug: string; name: string; lat: number; lng: number; }
-interface Pos { trainSlug: string; number: string; category: string; name?: string; lat: number; lng: number; fromCity: string; toCity: string; nextStation: string; delayMin: number; state: string; }
+interface Pos { trainSlug: string; number: string; category: string; name?: string; lat: number; lng: number; fromCity: string; toCity: string; nextStation: string; delayMin: number; state: string; bearing: number; }
 interface Focus {
   slug: string; number: string; category: string; name?: string;
   route: { lat: number; lng: number; name: string }[];
@@ -18,6 +18,18 @@ declare global {
 
 const LEAFLET_CSS = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";
 const LEAFLET_JS = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+
+// Marker-săgeată care indică direcția de mers (rotit după bearing).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function trainArrowIcon(L: any, bearing: number, color: string, focused: boolean) {
+  const size = focused ? 32 : 26;
+  const html =
+    `<div style="transform:rotate(${bearing}deg);width:${size}px;height:${size}px;">` +
+    `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="display:block">` +
+    `<path d="M12 2 L19 21 L12 16.5 L5 21 Z" fill="${color}" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>` +
+    `</svg></div>`;
+  return L.divIcon({ html, className: "train-arrow", iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+}
 
 function loadLeaflet(): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -100,9 +112,13 @@ export function MapLive({ stations, focus }: { stations: GeoStation[]; focus?: F
         if (!trainLayer.current) return;
         trainLayer.current.clearLayers();
         positions.forEach((p) => {
-          const focused = focus && p.trainSlug === focus.slug;
+          const focused = !!(focus && p.trainSlug === focus.slug);
           const color = p.state === "delayed" ? "#F59E0B" : "#16A34A";
-          const m = L.circleMarker([p.lat, p.lng], { radius: focused ? 10 : 7, color: focused ? "#F5A000" : "#fff", weight: focused ? 3 : 2, fillColor: color, fillOpacity: 1 });
+          const m = L.marker([p.lat, p.lng], {
+            icon: trainArrowIcon(L, p.bearing, color, focused),
+            zIndexOffset: focused ? 1000 : 0,
+          });
+          m.bindTooltip(`${p.category} ${p.number}`, { direction: "top", offset: [0, -10] });
           m.bindPopup(
             `<strong>${p.category} ${p.number}</strong>${p.name ? " · " + p.name : ""}<br/>${p.fromCity} → ${p.toCity}<br/>spre ${p.nextStation}` +
             (p.delayMin > 0 ? `<br/><span style="color:#F59E0B">+${p.delayMin} min</span>` : `<br/><span style="color:#16A34A">la timp</span>`) +
@@ -122,12 +138,17 @@ export function MapLive({ stations, focus }: { stations: GeoStation[]; focus?: F
 
   return (
     <div className="overflow-hidden rounded-lg border border-line">
+      <style>{`.train-arrow{background:transparent;border:none;}`}</style>
       <div ref={mapEl} className="h-[420px] w-full bg-subtle md:h-[560px]" />
       <div className="flex items-center justify-between gap-2 border-t border-line bg-card px-3 py-2 text-xs text-muted">
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1"><i className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: "#16A34A" }} /> la timp</span>
           <span className="flex items-center gap-1"><i className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: "#F59E0B" }} /> întârziat</span>
           <span className="flex items-center gap-1"><i className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: "#cbd5e1" }} /> gară</span>
+          <span className="flex items-center gap-1">
+            <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 2 L19 21 L12 16.5 L5 21 Z" fill="#16A34A" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" /></svg>
+            direcție mers
+          </span>
         </span>
         <span>{err ? "Hartă indisponibilă" : count !== null ? `${count} trenuri active · actualizare la 30s` : "se încarcă..."}</span>
       </div>
