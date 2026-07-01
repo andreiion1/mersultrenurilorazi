@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Board } from "@/components/Board";
+import { StationMap } from "@/components/StationMap";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { stations, stationBySlug, majorStations } from "@/data/stations";
@@ -71,6 +72,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           </div>
         </>
       )}
+
+      <StationMap name={s.name} city={s.city} county={s.county} mapQuery={s.mapQuery} />
 
       <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
       <Faq items={faq} />

@@ -26,6 +26,7 @@ export interface Station {
   isMajor: boolean;
   platformsCount?: number;
   aliases?: string[];
+  mapQuery?: string; // interogare Google Maps pentru locul exact (ex. "Gara de Nord București")
 }
 
 export interface TrainStop {

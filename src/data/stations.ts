@@ -48,6 +48,7 @@ export const stations: Station[] =
           lng: geo?.lng ?? g.lng,
           isMajor: geo?.isMajor ?? g.isMajor,
           aliases: geo?.aliases ?? g.aliases,
+          mapQuery: geo?.mapQuery,
         } as Station;
       })
     : MOCK_STATIONS;

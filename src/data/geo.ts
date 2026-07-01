@@ -10,10 +10,11 @@ export interface GeoMeta {
   region?: string;
   isMajor?: boolean;
   aliases?: string[];
+  mapQuery?: string; // interogare exactă Google Maps (suprascrie „Gara <nume>"), ex. "Gara de Nord București"
 }
 
 export const GEO: Record<string, GeoMeta> = {
-  "bucuresti-nord-gr-a": { lat: 44.4460, lng: 26.0730, name: "București Nord", city: "București", county: "București", region: "Muntenia", isMajor: true, aliases: ["Gara de Nord", "Bucuresti Nord", "București Nord"] },
+  "bucuresti-nord-gr-a": { lat: 44.4460, lng: 26.0730, name: "București Nord", city: "București", county: "București", region: "Muntenia", isMajor: true, aliases: ["Gara de Nord", "Bucuresti Nord", "București Nord"], mapQuery: "Gara de Nord București" },
   "brasov":              { lat: 45.6520, lng: 25.5910, name: "Brașov", city: "Brașov", county: "Brașov", region: "Transilvania", isMajor: true },
   "constanta":           { lat: 44.1730, lng: 28.6380, name: "Constanța", city: "Constanța", county: "Constanța", region: "Dobrogea", isMajor: true },
   "cluj-napoca":         { lat: 46.7794, lng: 23.6167, name: "Cluj-Napoca", city: "Cluj-Napoca", county: "Cluj", region: "Transilvania", isMajor: true },
