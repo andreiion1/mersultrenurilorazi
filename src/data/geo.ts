@@ -1,0 +1,105 @@
+// Coordonate + metadate pentru gările mari, cheie = slug-ul REAL din generated.json.
+// Aplicat peste datele importate (vezi stations.ts). TODO: extindere prin geocodare automată (Nominatim/OSM).
+
+export interface GeoMeta {
+  lat: number;
+  lng: number;
+  name?: string;     // nume afișat „curat" (suprascrie numele din XML)
+  city?: string;
+  county?: string;
+  region?: string;
+  isMajor?: boolean;
+  aliases?: string[];
+}
+
+export const GEO: Record<string, GeoMeta> = {
+  "bucuresti-nord-gr-a": { lat: 44.4460, lng: 26.0730, name: "București Nord", city: "București", county: "București", region: "Muntenia", isMajor: true, aliases: ["Gara de Nord", "Bucuresti Nord", "București Nord"] },
+  "brasov":              { lat: 45.6520, lng: 25.5910, name: "Brașov", city: "Brașov", county: "Brașov", region: "Transilvania", isMajor: true },
+  "constanta":           { lat: 44.1730, lng: 28.6380, name: "Constanța", city: "Constanța", county: "Constanța", region: "Dobrogea", isMajor: true },
+  "cluj-napoca":         { lat: 46.7794, lng: 23.6167, name: "Cluj-Napoca", city: "Cluj-Napoca", county: "Cluj", region: "Transilvania", isMajor: true },
+  "iasi":                { lat: 47.1620, lng: 27.5890, name: "Iași", city: "Iași", county: "Iași", region: "Moldova", isMajor: true },
+  "timisoara-nord":      { lat: 45.7490, lng: 21.2080, name: "Timișoara Nord", city: "Timișoara", county: "Timiș", region: "Banat", isMajor: true },
+  "sibiu":               { lat: 45.7900, lng: 24.1500, name: "Sibiu", city: "Sibiu", county: "Sibiu", region: "Transilvania", isMajor: true },
+  "craiova":             { lat: 44.3160, lng: 23.8010, name: "Craiova", city: "Craiova", county: "Dolj", region: "Oltenia", isMajor: true },
+  "oradea":              { lat: 47.0560, lng: 21.9290, name: "Oradea", city: "Oradea", county: "Bihor", region: "Crișana", isMajor: true },
+  "suceava":             { lat: 47.6510, lng: 26.2550, name: "Suceava", city: "Suceava", county: "Suceava", region: "Moldova", isMajor: true },
+  "bacau":               { lat: 46.5670, lng: 26.9130, name: "Bacău", city: "Bacău", county: "Bacău", region: "Moldova", isMajor: true },
+  "galati":              { lat: 45.4350, lng: 28.0370, name: "Galați", city: "Galați", county: "Galați", region: "Moldova", isMajor: true },
+  "braila":              { lat: 45.2690, lng: 27.9590, name: "Brăila", city: "Brăila", county: "Brăila", region: "Muntenia", isMajor: true },
+  "ploiesti-vest":       { lat: 44.9512, lng: 25.9962, name: "Ploiești Vest", city: "Ploiești", county: "Prahova", region: "Muntenia", isMajor: true },
+  "ploiesti-sud":        { lat: 44.9300, lng: 26.0300, name: "Ploiești Sud", city: "Ploiești", county: "Prahova", region: "Muntenia", isMajor: true },
+  "predeal":             { lat: 45.5000, lng: 25.5740, name: "Predeal", city: "Predeal", county: "Brașov", region: "Transilvania", isMajor: true },
+  "sinaia":              { lat: 45.3500, lng: 25.5500, name: "Sinaia", city: "Sinaia", county: "Prahova", region: "Muntenia", isMajor: true },
+  "busteni-hm":          { lat: 45.4090, lng: 25.5360, name: "Bușteni", city: "Bușteni", county: "Prahova", region: "Muntenia", isMajor: true },
+  "arad":                { lat: 46.1750, lng: 21.3200, name: "Arad", city: "Arad", county: "Arad", region: "Banat", isMajor: true },
+  "pitesti":             { lat: 44.8560, lng: 24.8690, name: "Pitești", city: "Pitești", county: "Argeș", region: "Muntenia", isMajor: true },
+  "mangalia":            { lat: 43.8160, lng: 28.5830, name: "Mangalia", city: "Mangalia", county: "Constanța", region: "Dobrogea", isMajor: true },
+  "sighisoara":          { lat: 46.2190, lng: 24.7960, name: "Sighișoara", city: "Sighișoara", county: "Mureș", region: "Transilvania", isMajor: true },
+  "baia-mare":           { lat: 47.6570, lng: 23.5700, name: "Baia Mare", city: "Baia Mare", county: "Maramureș", region: "Maramureș", isMajor: true },
+  "satu-mare":           { lat: 47.7900, lng: 22.8800, name: "Satu Mare", city: "Satu Mare", county: "Satu Mare", region: "Crișana", isMajor: true },
+  "targu-mures":         { lat: 46.5420, lng: 24.5570, name: "Târgu Mureș", city: "Târgu Mureș", county: "Mureș", region: "Transilvania", isMajor: true },
+  "ramnicu-valcea":      { lat: 45.1000, lng: 24.3690, name: "Râmnicu Vâlcea", city: "Râmnicu Vâlcea", county: "Vâlcea", region: "Oltenia", isMajor: true },
+  "buzau":               { lat: 45.1500, lng: 26.8290, name: "Buzău", city: "Buzău", county: "Buzău", region: "Muntenia", isMajor: true },
+  "deva":                { lat: 45.8800, lng: 22.9100, name: "Deva", city: "Deva", county: "Hunedoara", region: "Transilvania", isMajor: true },
+  "alba-iulia":          { lat: 46.0700, lng: 23.5800, name: "Alba Iulia", city: "Alba Iulia", county: "Alba", region: "Transilvania", isMajor: true },
+  "focsani":             { lat: 45.6970, lng: 27.1860, name: "Focșani", city: "Focșani", county: "Vrancea", region: "Moldova", isMajor: true },
+  "fagaras":             { lat: 45.8410, lng: 24.9730, name: "Făgăraș", city: "Făgăraș", county: "Brașov", region: "Transilvania", isMajor: true },
+  "medias":              { lat: 46.1620, lng: 24.3500, name: "Mediaș", city: "Mediaș", county: "Sibiu", region: "Transilvania", isMajor: true },
+  "piatra-neamt":        { lat: 46.9270, lng: 26.3700, name: "Piatra Neamț", city: "Piatra Neamț", county: "Neamț", region: "Moldova", isMajor: true },
+  "roman":               { lat: 46.9200, lng: 26.9300, name: "Roman", city: "Roman", county: "Neamț", region: "Moldova", isMajor: true },
+  "pascani":             { lat: 47.2470, lng: 26.7270, name: "Pașcani", city: "Pașcani", county: "Iași", region: "Moldova", isMajor: true },
+  "simeria":             { lat: 45.8500, lng: 23.0130, name: "Simeria", city: "Simeria", county: "Hunedoara", region: "Transilvania", isMajor: true },
+  "caransebes":          { lat: 45.4160, lng: 22.2200, name: "Caransebeș", city: "Caransebeș", county: "Caraș-Severin", region: "Banat", isMajor: true },
+  "drobeta-tr-severin":  { lat: 44.6360, lng: 22.6560, name: "Drobeta Turnu Severin", city: "Drobeta-Turnu Severin", county: "Mehedinți", region: "Oltenia", isMajor: true },
+  "fetesti":             { lat: 44.3870, lng: 27.8330, name: "Fetești", city: "Fetești", county: "Ialomița", region: "Muntenia", isMajor: true },
+  "tulcea-oras-hm":      { lat: 45.1710, lng: 28.7910, name: "Tulcea", city: "Tulcea", county: "Tulcea", region: "Dobrogea", isMajor: true },
+
+  // === Lot 2: reședințe de județ + orașe importante (gări mari) ===
+  "botosani":      { lat: 47.7400, lng: 26.6600, name: "Botoșani", city: "Botoșani", county: "Botoșani", region: "Moldova", isMajor: true },
+  "vaslui":        { lat: 46.6400, lng: 27.7300, name: "Vaslui", city: "Vaslui", county: "Vaslui", region: "Moldova", isMajor: true },
+  "barlad":        { lat: 46.2300, lng: 27.6700, name: "Bârlad", city: "Bârlad", county: "Vaslui", region: "Moldova", isMajor: true },
+  "tecuci":        { lat: 45.8500, lng: 27.4200, name: "Tecuci", city: "Tecuci", county: "Galați", region: "Moldova", isMajor: true },
+  "slatina":       { lat: 44.4300, lng: 24.3700, name: "Slatina", city: "Slatina", county: "Olt", region: "Oltenia", isMajor: true },
+  "alexandria":    { lat: 43.9700, lng: 25.3300, name: "Alexandria", city: "Alexandria", county: "Teleorman", region: "Muntenia", isMajor: true },
+  "targu-jiu":     { lat: 45.0400, lng: 23.2700, name: "Târgu Jiu", city: "Târgu Jiu", county: "Gorj", region: "Oltenia", isMajor: true },
+  "petrosani":     { lat: 45.4100, lng: 23.3700, name: "Petroșani", city: "Petroșani", county: "Hunedoara", region: "Transilvania", isMajor: true },
+  "resita-nord":   { lat: 45.3000, lng: 21.8900, name: "Reșița Nord", city: "Reșița", county: "Caraș-Severin", region: "Banat", isMajor: true },
+  "lugoj":         { lat: 45.6900, lng: 21.9000, name: "Lugoj", city: "Lugoj", county: "Timiș", region: "Banat", isMajor: true },
+  "carei":         { lat: 47.6900, lng: 22.4700, name: "Carei", city: "Carei", county: "Satu Mare", region: "Crișana", isMajor: true },
+  "sighetu-marmatiei": { lat: 47.9300, lng: 23.8900, name: "Sighetu Marmației", city: "Sighetu Marmației", county: "Maramureș", region: "Maramureș", isMajor: true },
+  "miercurea-ciuc": { lat: 46.3600, lng: 25.8000, name: "Miercurea Ciuc", city: "Miercurea Ciuc", county: "Harghita", region: "Transilvania", isMajor: true },
+  "sfantu-gheorghe": { lat: 45.8600, lng: 25.7900, name: "Sfântu Gheorghe", city: "Sfântu Gheorghe", county: "Covasna", region: "Transilvania", isMajor: true },
+  "adjud":         { lat: 46.1000, lng: 27.1700, name: "Adjud", city: "Adjud", county: "Vrancea", region: "Moldova", isMajor: true },
+  "marasesti":     { lat: 45.8800, lng: 27.2300, name: "Mărășești", city: "Mărășești", county: "Vrancea", region: "Moldova", isMajor: true },
+  "ramnicu-sarat": { lat: 45.3800, lng: 27.0500, name: "Râmnicu Sărat", city: "Râmnicu Sărat", county: "Buzău", region: "Muntenia", isMajor: true },
+  "onesti":        { lat: 46.2500, lng: 26.7600, name: "Onești", city: "Onești", county: "Bacău", region: "Moldova", isMajor: true },
+  "comanesti":     { lat: 46.4200, lng: 26.4400, name: "Comănești", city: "Comănești", county: "Bacău", region: "Moldova", isMajor: true },
+  "gheorgheni":    { lat: 46.7200, lng: 25.6000, name: "Gheorgheni", city: "Gheorgheni", county: "Harghita", region: "Transilvania", isMajor: true },
+  "toplita":       { lat: 46.9200, lng: 25.3500, name: "Toplița", city: "Toplița", county: "Harghita", region: "Transilvania", isMajor: true },
+  "medgidia":      { lat: 44.2500, lng: 28.2700, name: "Medgidia", city: "Medgidia", county: "Constanța", region: "Dobrogea", isMajor: true },
+  "caracal":       { lat: 44.1100, lng: 24.3500, name: "Caracal", city: "Caracal", county: "Olt", region: "Oltenia", isMajor: true },
+  "campina":       { lat: 45.1300, lng: 25.7400, name: "Câmpina", city: "Câmpina", county: "Prahova", region: "Muntenia", isMajor: true },
+  "vatra-dornei":  { lat: 47.3400, lng: 25.3600, name: "Vatra Dornei", city: "Vatra Dornei", county: "Suceava", region: "Moldova", isMajor: true },
+  "orsova":        { lat: 44.7200, lng: 22.4000, name: "Orșova", city: "Orșova", county: "Mehedinți", region: "Oltenia", isMajor: true },
+  "baile-herculane": { lat: 44.8800, lng: 22.4100, name: "Băile Herculane", city: "Băile Herculane", county: "Caraș-Severin", region: "Banat", isMajor: true },
+  "jibou":         { lat: 47.2600, lng: 23.2600, name: "Jibou", city: "Jibou", county: "Sălaj", region: "Transilvania", isMajor: true },
+  "beclean-pe-somes": { lat: 47.1800, lng: 24.1800, name: "Beclean pe Someș", city: "Beclean", county: "Bistrița-Năsăud", region: "Transilvania", isMajor: true },
+  "blaj":          { lat: 46.1700, lng: 23.9200, name: "Blaj", city: "Blaj", county: "Alba", region: "Transilvania", isMajor: true },
+
+  // === Lot 2b: noduri feroviare (coordonate doar, fără a fi „gară mare") ===
+  "videle":        { lat: 44.2800, lng: 25.5300, name: "Videle", region: "Muntenia" },
+  "rosiori-nord":  { lat: 44.1100, lng: 24.9900, name: "Roșiori Nord", region: "Muntenia" },
+  "giurgiu-nord":  { lat: 43.9100, lng: 25.9700, name: "Giurgiu Nord", region: "Muntenia" },
+  "deda":          { lat: 46.9300, lng: 24.9000, name: "Deda", region: "Transilvania" },
+  "brasov-triaj":  { lat: 45.6600, lng: 25.6200, name: "Brașov Triaj", region: "Transilvania" },
+  "teius":         { lat: 46.2000, lng: 23.6800, name: "Teiuș", region: "Transilvania" },
+  "copsa-mica":    { lat: 46.1100, lng: 24.2400, name: "Copșa Mică", region: "Transilvania" },
+  "razboieni":     { lat: 46.4100, lng: 23.9100, name: "Războieni", region: "Transilvania" },
+  "podu-olt":      { lat: 45.7400, lng: 24.3000, name: "Podu Olt", region: "Transilvania" },
+  "piatra-olt":    { lat: 44.3600, lng: 24.2700, name: "Piatra Olt", region: "Oltenia" },
+  "filiasi":       { lat: 44.5500, lng: 23.5300, name: "Filiași", region: "Oltenia" },
+  "strehaia":      { lat: 44.6200, lng: 23.2000, name: "Strehaia", region: "Oltenia" },
+  "sebes-alba":    { lat: 45.9500, lng: 23.5700, name: "Sebeș Alba", region: "Transilvania" },
+  "timisoara-est": { lat: 45.7400, lng: 21.2500, name: "Timișoara Est", region: "Banat" },
+  "ploiesti-est":  { lat: 44.9500, lng: 26.0400, name: "Ploiești Est", region: "Muntenia" },
+};

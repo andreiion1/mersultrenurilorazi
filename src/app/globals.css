@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   Design tokens — MersulTrenurilorAzi Design System v2
+   Filozofie: Precision meets poetry. Panoul de plecare
+   din gară, reinventat pentru web.
+   ========================================================= */
+:root {
+  /* === Brand: Amber (lumina farului de tren) === */
+  --color-primary: #F5A000;
+  --color-primary-hover: #D98A00;
+  --color-primary-soft: #FFF3D6;
+
+  /* === Brand: Navy (noaptea gării, autoritate) === */
+  --color-navy: #061127;
+  --color-navy-2: #0D1E3D;
+  --color-navy-3: #152847;
+  --color-navy-border: rgba(255, 255, 255, 0.10);
+  --color-navy-text: rgba(255, 255, 255, 0.55);
+
+  /* === Semnal verde (la timp, go) === */
+  --color-accent: #00C896;
+  --color-success: #00C896;
+  --color-success-bg: #E0FBF4;
+
+  /* === Warning (risc mediu, atenție) === */
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FEF3C7;
+
+  /* === Roșu alert (întârziere, stop) === */
+  --color-danger: #FF3341;
+  --color-danger-bg: #FFE8EA;
+
+  --color-info: #1A6BFF;
+
+  /* === Suprafețe (cald, ca hârtia unui bilet) === */
+  --bg-base: #FFFFFF;
+  --bg-subtle: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --border: #E8E6E1;
+  --text-strong: #061127;
+  --text-default: #374151;
+  --text-muted: #6B7280;
+
+  --radius-md: 12px;
+  --shadow-card: 0 2px 8px rgba(6, 17, 39, 0.08), 0 0 0 0.5px rgba(6, 17, 39, 0.06);
+}
+
+.dark {
+  --color-primary: #F5A000;
+  --color-primary-hover: #D98A00;
+  --color-primary-soft: #2C1E00;
+
+  --color-navy: #020A18;
+  --color-navy-2: #071022;
+  --color-navy-3: #0D1A33;
+  --color-navy-border: rgba(255, 255, 255, 0.08);
+  --color-navy-text: rgba(255, 255, 255, 0.45);
+
+  --color-accent: #00D9A3;
+  --color-success: #00D9A3;
+  --color-success-bg: #052E22;
+
+  --color-warning: #F5A000;
+  --color-warning-bg: #2C1E00;
+  --color-danger: #FF4D5A;
+  --color-danger-bg: #2C0A0D;
+
+  --bg-base: #0A1628;
+  --bg-subtle: #080F1E;
+  --bg-card: #0D1E3D;
+  --border: #1E2E4A;
+  --text-strong: #F0F4FF;
+  --text-default: #B8C4D8;
+  --text-muted: #7A8CA8;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-subtle);
+  color: var(--text-default);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Numere tabelare — pentru ore și prețuri */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Font monospace pentru ore (elementul vizual dominant) */
+.font-time {
+  font-family: 'Courier New', 'Lucida Console', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.board-time {
+  color: var(--text-strong) !important;
+  opacity: 1;
+}
+
+.dark .board-time {
+  color: #F0F4FF !important;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--border) 37%, var(--bg-subtle) 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+
+/* Puls animat pentru statusul live */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+/* Animație swap button */
+@keyframes spin-half {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+}
+.spin-on-click:active {
+  animation: spin-half 0.25s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Focus visible — cu amber */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Bara laterală colorată pe card-urile de tren */
+.train-card-ontime  { border-left: 3px solid var(--color-success); }
+.train-card-delayed { border-left: 3px solid var(--color-warning); }
+.train-card-late    { border-left: 3px solid var(--color-danger); }
+.train-card-cancel  { border-left: 3px solid var(--color-danger); }
+.train-card-connect { border-left: 3px solid #8B9CF5; }
+
+/* Hero navy — background section complet dark */
+.hero-navy {
+  background-color: var(--color-navy);
+  position: relative;
+}
+.hero-navy::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-primary) 50%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* Buton primar amber */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-navy);
+  font-weight: 600;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+/* Input dark (pentru hero section) */
+.input-dark {
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  transition: border-color 0.15s, background 0.15s;
+}
+.input-dark:focus-within {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(245, 160, 0, 0.6);
+}
+.input-dark::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}

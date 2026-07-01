@@ -1,0 +1,257 @@
+// Schema Prisma — derivată din docs/03-database-design.md
+// Pentru producție: PostgreSQL 16 + PostGIS. Câmpurile geografice (geom) se adaugă prin SQL raw în migrații.
+// În MVP nu este conectată încă; aplicația rulează pe date mock din src/data.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TrainCategory {
+  R
+  RE
+  IR
+  IRN
+  IC
+  METROPOLITAN
+  INTERNATIONAL
+}
+
+enum RunStatusEnum {
+  scheduled
+  on_time
+  delayed
+  cancelled
+  arrived
+  unknown
+}
+
+enum DelaySource {
+  official_xml
+  iris_semi_live
+  partner_api
+  manual
+  interpolated
+  mock
+}
+
+enum PageType {
+  route
+  station
+  train
+  city
+  departures
+  arrivals
+  comparison
+}
+
+enum SeoIndexStatus {
+  index
+  noindex
+}
+
+model Operator {
+  id               Int      @id @default(autoincrement())
+  name             String
+  slug             String   @unique
+  shortName        String?
+  licenseNo        String?
+  website          String?
+  logoUrl          String?
+  ticketUrlPattern String?
+  colorHex         String?
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  trains           Train[]
+}
+
+model City {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  county      String?
+  region      String?
+  population  Int?
+  lat         Float?
+  lng         Float?
+  isMajor     Boolean   @default(false)
+  seoPriority Int       @default(5)
+  createdAt   DateTime  @default(now())
+  stations    Station[]
+}
+
+model Station {
+  id             Int          @id @default(autoincrement())
+  name           String
+  slug           String       @unique
+  cityId         Int?
+  city           City?        @relation(fields: [cityId], references: [id])
+  county         String?
+  cfrCode        String?
+  lat            Float?
+  lng            Float?
+  elevationM     Int?
+  platformsCount Int?
+  isMajor        Boolean      @default(false)
+  aliases        String[]
+  seoPriority    Int          @default(5)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  stops          TrainRunStop[]
+  routesFrom     Route[]      @relation("RouteFrom")
+  routesTo       Route[]      @relation("RouteTo")
+
+  @@index([cityId])
+  @@index([cfrCode])
+}
+
+model Train {
+  id          Int           @id @default(autoincrement())
+  number      String
+  category    TrainCategory
+  operatorId  Int
+  operator    Operator      @relation(fields: [operatorId], references: [id])
+  name        String?
+  slug        String        @unique
+  rankLabel   String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  runs        TrainRun[]
+
+  @@unique([category, number, operatorId])
+  @@index([operatorId])
+  @@index([number])
+}
+
+model Route {
+  id                Int      @id @default(autoincrement())
+  fromStationId     Int
+  toStationId       Int
+  fromStation       Station  @relation("RouteFrom", fields: [fromStationId], references: [id])
+  toStation         Station  @relation("RouteTo", fields: [toStationId], references: [id])
+  slug              String   @unique
+  distanceKm        Float?
+  minDurationMin    Int?
+  avgDurationMin    Int?
+  dailyTrainsCount  Int?
+  hasDirect         Boolean  @default(true)
+  isPopular         Boolean  @default(false)
+  searchVolume      Int?
+  seoPriority       Int      @default(5)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([fromStationId])
+  @@index([toStationId])
+}
+
+model TrainRun {
+  id               BigInt          @id @default(autoincrement())
+  trainId          Int
+  train            Train           @relation(fields: [trainId], references: [id])
+  timetableYear    String
+  originStationId  Int
+  destStationId    Int
+  depTime          String
+  arrTime          String
+  arrivesNextDay   Boolean         @default(false)
+  totalDurationMin Int
+  changesCount     Int             @default(0)
+  distanceKm       Float?
+  runsMonday       Boolean         @default(true)
+  runsTuesday      Boolean         @default(true)
+  runsWednesday    Boolean         @default(true)
+  runsThursday     Boolean         @default(true)
+  runsFriday       Boolean         @default(true)
+  runsSaturday     Boolean         @default(true)
+  runsSunday       Boolean         @default(true)
+  validFrom        DateTime?
+  validTo          DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  stops            TrainRunStop[]
+  delays           Delay[]
+
+  @@index([trainId])
+  @@index([originStationId])
+  @@index([destStationId])
+  @@index([timetableYear])
+}
+
+model TrainRunStop {
+  id                   BigInt   @id @default(autoincrement())
+  trainRunId           BigInt
+  trainRun             TrainRun @relation(fields: [trainRunId], references: [id], onDelete: Cascade)
+  stationId            Int
+  station              Station  @relation(fields: [stationId], references: [id])
+  seq                  Int
+  arrTime              String?
+  depTime              String?
+  platform             String?
+  distanceFromOriginKm Float?
+  dwellMin             Int?
+  isBoarding           Boolean  @default(true)
+
+  @@unique([trainRunId, seq])
+  @@index([stationId, depTime])
+}
+
+model Delay {
+  id           BigInt        @id @default(autoincrement())
+  trainRunId   BigInt
+  trainRun     TrainRun      @relation(fields: [trainRunId], references: [id], onDelete: Cascade)
+  stationId    Int?
+  serviceDate  DateTime
+  observedAt   DateTime      @default(now())
+  delayMin     Int           @default(0)
+  status       RunStatusEnum @default(unknown)
+  source       DelaySource
+  createdAt    DateTime      @default(now())
+
+  @@index([trainRunId, serviceDate])
+  @@index([observedAt])
+}
+
+model RoutePageSeo {
+  id              BigInt         @id @default(autoincrement())
+  pageType        PageType
+  routeId         Int?
+  stationId       Int?
+  trainId         Int?
+  cityId          Int?
+  urlPath         String         @unique
+  h1              String?
+  metaTitle       String?
+  metaDescription String?
+  introMd         String?
+  bodyMd          String?
+  faq             Json?
+  schemaJsonld    Json?
+  indexStatus     SeoIndexStatus @default(index)
+  qualityScore    Int            @default(0)
+  lastGenerated   DateTime?
+  lastPublished   DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([pageType])
+  @@index([qualityScore])
+}
+
+model ImportLog {
+  id            BigInt   @id @default(autoincrement())
+  source        String
+  jobType       String?
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  status        String?
+  rowsProcessed Int?
+  rowsInserted  Int?
+  rowsUpdated   Int?
+  errors        Json?
+}
