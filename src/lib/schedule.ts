@@ -36,13 +36,15 @@ export function dayKeyOf(dateISO: string): DayKey {
   return DAY_KEYS[d.getDay()];
 }
 
+// Data „azi"/„mâine" pe fusul României (nu UTC — altfel între 00:00 și 02:00/03:00
+// ora locală site-ul ar afișa trenurile de ieri).
+const RO_DATE = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Bucharest", year: "numeric", month: "2-digit", day: "2-digit" });
+
 export function todayISO(): string {
-  return new Date().toISOString().slice(0, 10);
+  return RO_DATE.format(new Date());
 }
 export function tomorrowISO(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
+  return RO_DATE.format(new Date(Date.now() + 24 * 60 * 60 * 1000));
 }
 
 // ---------- Preț standard clasa 2 (grila oficială CFR) ----------

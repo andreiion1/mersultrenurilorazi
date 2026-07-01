@@ -4,16 +4,20 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { TrainResultCard } from "@/components/TrainResultCard";
+import { ResultsControls } from "@/components/ResultsControls";
+import { DateNav } from "@/components/DateNav";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
-import { search, todayISO, formatDuration } from "@/lib/schedule";
+import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
+import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
 import { pageMeta, faqSchema } from "@/lib/seo";
 
 const YEAR = new Date().getFullYear();
 
 export function generateStaticParams() {
-  return getAllDirectRoutes().slice(0, 100).map((r) => ({ slug: r.slug }));
+  // Pre-generăm TOATE rutele directe între gări majore (~480) pentru viteză și indexare sigură.
+  return getAllDirectRoutes().map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -22,25 +26,47 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!r) return pageMeta({ title: "Rută indisponibilă", description: "", path: `/rute/${slug}`, noindex: true });
   return pageMeta({
     title: `Tren ${r.fromCity} ${r.toCity} — Orar, Preț Bilet și Durată ${YEAR}`,
-    description: `Toate trenurile ${r.fromCity}–${r.toCity} azi. ${r.dailyTrainsCount} trenuri/zi, durată de la ${formatDuration(r.minDurationMin)}, ${r.distanceKm} km. Directe și cu schimbări. Cumpără bilet.`,
+    description: `Toate trenurile ${r.fromCity}–${r.toCity} azi și mâine. ${r.dailyTrainsCount} trenuri/zi, durată de la ${formatDuration(r.minDurationMin)}, ${r.distanceKm} km. Directe și cu schimbări. Cumpără bilet.`,
     path: `/rute/${r.slug}`,
     noindex: !r.hasDirect,
   });
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+interface Props {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ data?: string; sort?: string; directe?: string }>;
+}
+
+export default async function Page({ params, searchParams }: Props) {
   const { slug } = await params;
+  const sp = await searchParams;
   const r = getRouteBySlug(slug);
   if (!r) notFound();
+
   const today = todayISO();
-  const result = search(r.fromSlug, r.toSlug, today);
+  const tomorrow = tomorrowISO();
+  const date = parseDateParam(sp.data, today);
+  const sort = parseSort(sp.sort);
+  const directOnly = parseDirectOnly(sp.directe);
+
+  const result = search(r.fromSlug, r.toSlug, date);
+  const list = applyView(result.all, sort, directOnly);
   const fastest = result.all.length ? Math.min(...result.all.map((x) => x.totalDurationMin)) : 0;
+
+  const dateLabel =
+    date === today ? "azi" :
+    date === tomorrow ? "mâine" :
+    new Date(date + "T00:00:00").toLocaleDateString("ro-RO", { weekday: "long", day: "numeric", month: "long" });
+
+  const baseParams = { data: date === today ? undefined : date };
+  const isDefaultView = sort === "plecare" && !directOnly;
 
   const faq = [
     { q: `Cât durează trenul ${r.fromCity}–${r.toCity}?`, a: `Cel mai rapid tren parcurge ruta în aproximativ ${formatDuration(r.minDurationMin)}. Durata medie este de circa ${formatDuration(r.avgDurationMin)}.` },
     { q: `Câte trenuri sunt pe zi pe ruta ${r.fromCity}–${r.toCity}?`, a: `Circulă aproximativ ${r.dailyTrainsCount} trenuri directe pe zi. Distanța este de ${r.distanceKm} km.` },
     { q: `Există trenuri directe ${r.fromCity}–${r.toCity}?`, a: r.hasDirect ? "Da, există trenuri directe pe această rută." : "Nu există trenuri directe; ruta necesită cel puțin o schimbare." },
-    { q: "De unde cumpăr biletul?", a: "Apasă „Cumpără bilet” pe oricare tren pentru a fi direcționat către platforma oficială CFR Călători." },
+    { q: `Ce trenuri circulă mâine pe ruta ${r.fromCity}–${r.toCity}?`, a: "Selectează «Mâine» în lista de mai sus ca să vezi orarul complet pentru ziua următoare, sau alege orice altă dată din calendar." },
+    { q: "De unde cumpăr biletul?", a: "Apasă «Cumpără bilet» pe oricare tren pentru a fi direcționat către platforma oficială CFR Călători." },
   ];
 
   return (
@@ -55,20 +81,41 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <Stat label="Operatori" value={r.operators.join(", ") || "—"} />
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-strong">Trenuri azi</h2>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-xl font-bold capitalize text-strong">Trenuri {dateLabel}</h2>
         <span className="text-sm text-muted tnum">{fastest ? `cel mai rapid ${formatDuration(fastest)}` : ""}</span>
       </div>
-      <div className="mt-3 space-y-3">
-        {result.direct.map((x, i) => <TrainResultCard key={`d${i}`} r={x} />)}
-        {result.connections.length > 0 && (
-          <>
-            <h3 className="pt-2 text-sm font-bold uppercase text-muted">Cu schimbare</h3>
-            {result.connections.map((x, i) => <TrainResultCard key={`c${i}`} r={x} />)}
-          </>
+
+      <div className="mt-3 space-y-2.5">
+        <DateNav basePath={`/rute/${r.slug}`} date={date} today={today} tomorrow={tomorrow}
+          extraParams={{ sort: sort === "plecare" ? undefined : sort, directe: directOnly ? "1" : undefined }} />
+        {result.all.length > 0 && (
+          <ResultsControls basePath={`/rute/${r.slug}`} baseParams={baseParams}
+            sort={sort} directOnly={directOnly}
+            directCount={result.direct.length} totalCount={result.all.length} />
         )}
-        {result.all.length === 0 && (
-          <p className="rounded-md border border-line bg-card p-6 text-center text-muted">Azi nu circulă trenuri pe această rută. Verifică altă dată.</p>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {isDefaultView ? (
+          <>
+            {result.direct.map((x, i) => <TrainResultCard key={`d${i}`} r={x} />)}
+            {result.connections.length > 0 && (
+              <>
+                <h3 className="pt-2 text-sm font-bold uppercase text-muted">Cu schimbare</h3>
+                {result.connections.map((x, i) => <TrainResultCard key={`c${i}`} r={x} />)}
+              </>
+            )}
+          </>
+        ) : (
+          list.map((x, i) => <TrainResultCard key={i} r={x} />)
+        )}
+        {list.length === 0 && (
+          <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
+            {directOnly && result.all.length > 0
+              ? "Nu există trenuri directe la această dată — vezi variantele cu schimbare dezactivând filtrul."
+              : `Nu circulă trenuri pe această rută ${dateLabel}. Alege altă dată.`}
+          </p>
         )}
       </div>
 

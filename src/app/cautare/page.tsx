@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Container } from "@/components/Container";
 import { SearchBox } from "@/components/SearchBox";
 import { TrainResultCard } from "@/components/TrainResultCard";
+import { ResultsControls } from "@/components/ResultsControls";
 import { stationBySlug } from "@/data/stations";
 import { search, todayISO, formatDuration } from "@/lib/schedule";
+import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
@@ -14,20 +16,24 @@ export const metadata: Metadata = pageMeta({
   noindex: true,
 });
 
-interface Props { searchParams: Promise<{ from?: string; to?: string; date?: string }>; }
+interface Props { searchParams: Promise<{ from?: string; to?: string; date?: string; sort?: string; directe?: string }>; }
 
 export default async function SearchPage({ searchParams }: Props) {
   const params = await searchParams;
   const fromSlug = params.from ?? "";
   const toSlug = params.to ?? "";
-  const date = params.date ?? todayISO();
+  const date = parseDateParam(params.date, todayISO());
+  const sort = parseSort(params.sort);
+  const directOnly = parseDirectOnly(params.directe);
   const from = stationBySlug(fromSlug);
   const to = stationBySlug(toSlug);
 
   const hasQuery = !!from && !!to;
   const result = hasQuery ? search(fromSlug, toSlug, date) : { direct: [], connections: [], all: [] };
+  const list = applyView(result.all, sort, directOnly);
   const fastest = result.all.length ? Math.min(...result.all.map((r) => r.totalDurationMin)) : 0;
   const cheapest = result.all.length ? Math.min(...result.all.map((r) => r.priceFrom.amount)) : 0;
+  const isDefaultView = sort === "plecare" && !directOnly;
 
   const dateLabel = new Date(date + "T00:00:00").toLocaleDateString("ro-RO", { weekday: "long", day: "numeric", month: "long" });
 
@@ -56,17 +62,33 @@ export default async function SearchPage({ searchParams }: Props) {
 
           {result.all.length > 0 ? (
             <>
-              <p className="mb-4 text-sm text-muted tnum">
+              <p className="mb-3 text-sm text-muted tnum">
                 {result.direct.length} directe{result.connections.length ? ` · ${result.connections.length} cu schimbare` : ""} ·
                 cel mai rapid {formatDuration(fastest)} · de la {cheapest.toFixed(1)} lei
               </p>
+              <div className="mb-4">
+                <ResultsControls basePath="/cautare"
+                  baseParams={{ from: fromSlug, to: toSlug, date }}
+                  sort={sort} directOnly={directOnly}
+                  directCount={result.direct.length} totalCount={result.all.length} />
+              </div>
               <div className="space-y-3">
-                {result.direct.map((r, i) => <TrainResultCard key={`d${i}`} r={r} />)}
-                {result.connections.length > 0 && (
+                {isDefaultView ? (
                   <>
-                    <h2 className="pt-4 text-sm font-bold uppercase text-muted">Cu schimbare</h2>
-                    {result.connections.map((r, i) => <TrainResultCard key={`c${i}`} r={r} />)}
+                    {result.direct.map((r, i) => <TrainResultCard key={`d${i}`} r={r} />)}
+                    {result.connections.length > 0 && (
+                      <>
+                        <h2 className="pt-4 text-sm font-bold uppercase text-muted">Cu schimbare</h2>
+                        {result.connections.map((r, i) => <TrainResultCard key={`c${i}`} r={r} />)}
+                      </>
+                    )}
                   </>
+                ) : list.length > 0 ? (
+                  list.map((r, i) => <TrainResultCard key={i} r={r} />)
+                ) : (
+                  <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
+                    Nu există trenuri directe la această dată — dezactivează filtrul ca să vezi variantele cu schimbare.
+                  </p>
                 )}
               </div>
             </>

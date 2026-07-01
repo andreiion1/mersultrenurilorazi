@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
 
   const staticPages = [
-    "", "/mersul-trenurilor", "/trenuri-azi", "/rute", "/statii",
+    "", "/mersul-trenurilor", "/trenuri-azi", "/trenuri-maine", "/rute", "/statii",
     "/intarzieri-trenuri", "/harta-trenuri-live", "/blog", "/despre", "/surse-de-date",
   ].map((p) => ({ url: `${base}${p}`, lastModified: now, changeFrequency: "daily" as const, priority: p === "" ? 1 : 0.8 }));
 

@@ -6,6 +6,7 @@ import { majorStations } from "@/data/stations";
 const RESURSE = [
   { href: "/mersul-trenurilor", label: "Mersul trenurilor" },
   { href: "/trenuri-azi",       label: "Trenuri azi" },
+  { href: "/trenuri-maine",     label: "Trenuri maine" },
   { href: "/intarzieri-trenuri", label: "Intarzieri live" },
   { href: "/harta-trenuri-live", label: "Harta live" },
   { href: "/blog",              label: "Blog" },
