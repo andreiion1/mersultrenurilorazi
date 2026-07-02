@@ -21,7 +21,7 @@ export const metadata: Metadata = pageMeta({
 const FAQ = [
   { q: "Ce este mersul trenurilor?", a: "Mersul trenurilor este orarul oficial al trenurilor de călători, publicat anual și valabil de la a doua duminică din decembrie. El conține orele de plecare și sosire pentru toate trenurile operatorilor licențiați din România." },
   { q: "Cum caut un tren între două orașe?", a: "Folosește caseta de căutare: alege stația de plecare, destinația și data. Vei vedea trenurile directe și cu schimbări, durata, prețul orientativ și statusul." },
-  { q: "Datele de întârziere sunt în timp real?", a: "În această versiune, statusul este orientativ (mock pentru demonstrație). În producție, întârzierile vor fi actualizate din surse oficiale sau semi-live. Verifică mereu sursa oficială înainte de călătorie." },
+  { q: "Datele de întârziere sunt în timp real?", a: "Nu. Statusul și întârzierile afișate aici sunt orientative, calculate din orar — nu sunt preluate în timp real. Pentru statusul oficial în timp real, verifică Infofer sau CFR Călători înainte de călătorie." },
   { q: "Pot cumpăra bilet de aici?", a: "Te direcționăm către platforma oficială CFR Călători pentru cumpărarea biletului, cu ruta și data precompletate acolo unde este posibil." },
 ];
 

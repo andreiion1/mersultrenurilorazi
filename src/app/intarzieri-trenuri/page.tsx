@@ -14,13 +14,13 @@ import { AlertIcon } from "@/components/Icons";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMeta({
-  title: "Întârzieri Trenuri Azi — Status Live CFR",
+  title: "Întârzieri Trenuri Azi — Status CFR",
   description: "Întârzierile trenurilor din România. Trenuri cu întârziere azi pe rute principale, cu status actualizat.",
   path: "/intarzieri-trenuri",
 });
 
 const FAQ = [
-  { q: "Cum verific întârzierea unui tren?", a: "Caută trenul după numărul lui (ex. IR 1592) și deschide pagina trenului. Când statusul live este conectat, întârzierea apare acolo și pe pagina gării." },
+  { q: "Cum verific întârzierea unui tren?", a: "Caută trenul după numărul lui (ex. IR 1592) și deschide pagina trenului. Când statusul oficial este conectat, întârzierea apare acolo și pe pagina gării. Momentan poți verifica statusul în timp real direct pe Infofer." },
   { q: "De ce nu apar întârzieri acum?", a: "Statusul în timp real provine din sistemul IRIS și se activează după validare tehnică și juridică. Până atunci afișăm orarul oficial, fără a inventa întârzieri. Verifică mereu sursa oficială înainte de călătorie." },
 ];
 
@@ -34,13 +34,13 @@ export default function Page() {
       {!IRIS_ENABLED && (
         <div className="mt-3 flex items-start gap-2 rounded-md border border-warning bg-warning-bg/40 p-3 text-sm text-body">
           <span className="text-warning"><AlertIcon width={18} height={18} /></span>
-          <p>Statusul live al trenurilor (din IRIS) este în curs de conectare. Momentan afișăm orarul oficial, fără întârzieri estimate. Pentru status în timp real, verifică și sursa oficială CFR/Infofer.</p>
+          <p>Statusul oficial al trenurilor (din IRIS) este în curs de conectare. Momentan afișăm orarul oficial, fără întârzieri estimate. Pentru status în timp real, verifică sursa oficială CFR/Infofer.</p>
         </div>
       )}
 
       <div className="mt-5 space-y-3">
         {delays.length === 0 ? (
-          <p className="rounded-md border border-line bg-card p-6 text-center text-muted">Status live indisponibil momentan. Caută un tren după număr pentru detalii de orar.</p>
+          <p className="rounded-md border border-line bg-card p-6 text-center text-muted">Statusul oficial nu este disponibil momentan. Caută un tren după număr pentru detalii de orar.</p>
         ) : (
           delays.map((d) => (
             <div key={d.trainSlug} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-line bg-card p-4">

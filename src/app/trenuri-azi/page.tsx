@@ -15,8 +15,8 @@ const dateLabel = () =>
   });
 
 export const metadata: Metadata = pageMeta({
-  title: "Trenuri Azi — Orar și Întârzieri Live în România",
-  description: "Vezi ce trenuri circulă azi în România: plecări, întârzieri și status pe rutele principale. Actualizat continuu.",
+  title: "Trenuri Azi — Orar și Întârzieri în România",
+  description: "Vezi ce trenuri circulă azi în România: plecări, întârzieri și status pe rutele principale.",
   path: "/trenuri-azi",
 });
 

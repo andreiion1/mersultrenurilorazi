@@ -12,8 +12,8 @@ import { pageMeta } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMeta({
-  title: "Hartă Trenuri Live — Trenurile pe Hartă în Timp Real",
-  description: "Urmărește trenurile din România pe hartă, în timp real. Poziție aproximativă, întârzieri și status pe rutele principale.",
+  title: "Hartă Trenuri — Trenurile din România pe Hartă",
+  description: "Vezi trenurile din România pe hartă. Poziții aproximative, calculate din orar, cu direcția de mers pe rutele principale.",
   path: "/harta-trenuri-live",
 });
 
@@ -28,10 +28,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
 
   return (
     <Container className="py-2">
-      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Hartă live" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Harta trenurilor live</h1>
+      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Hartă trenuri" }]} />
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Harta trenurilor din România</h1>
       <p className="mt-1 text-sm text-muted">
-        Poziții aproximative, interpolate din orar (mock/semi-live). <strong>TODO producție:</strong> poziții reale din parteneriat/IRIS.
+        Poziții <strong>aproximative</strong>, calculate din orar (nu în timp real). Pentru status oficial în timp real, verifică{" "}
+        <a href="https://mersultrenurilor.infofer.ro/ro-RO/Trains" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Infofer</a>.
       </p>
 
       {focus && (

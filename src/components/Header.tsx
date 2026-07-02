@@ -10,7 +10,7 @@ const NAV = [
   { href: "/trenuri-azi",        label: "Trenuri azi" },
   { href: "/statii",             label: "Gari" },
   { href: "/intarzieri-trenuri", label: "Intarzieri" },
-  { href: "/harta-trenuri-live", label: "Harta live" },
+  { href: "/harta-trenuri-live", label: "Harta trenuri" },
   { href: "/blog",               label: "Blog" },
 ];
 
@@ -60,17 +60,6 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <span
-            className="hidden items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold sm:flex"
-            style={{
-              backgroundColor: "rgba(0,200,150,0.12)",
-              color: "var(--color-success)",
-              border: "0.5px solid rgba(0,200,150,0.25)",
-            }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full pulse-live" style={{ backgroundColor: "var(--color-success)" }} />
-            Live
-          </span>
           <Link
             href="/cautare"
             className="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold sm:flex"

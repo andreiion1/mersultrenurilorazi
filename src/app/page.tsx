@@ -47,7 +47,7 @@ export default function HomePage() {
             className="mx-auto mb-8 max-w-xl text-center text-sm leading-relaxed"
             style={{ color: "rgba(255,255,255,0.50)" }}
           >
-            Cauta orice tren din Romania. Orar, intarzieri live si bilete &mdash;
+            Cauta orice tren din Romania. Orar, intarzieri si bilete &mdash;
             mai simplu decat site-urile oficiale.
           </p>
 
@@ -58,8 +58,8 @@ export default function HomePage() {
           <div className="mx-auto mt-5 flex max-w-3xl flex-wrap justify-center gap-2">
             {[
               { href: "/trenuri-azi", label: "Trenuri azi" },
-              { href: "/intarzieri-trenuri", label: "Intarzieri live" },
-              { href: "/harta-trenuri-live", label: "Harta live" },
+              { href: "/intarzieri-trenuri", label: "Intarzieri" },
+              { href: "/harta-trenuri-live", label: "Harta trenuri" },
               { href: "/favorite", label: "Favorite" },
             ].map(({ href, label }) => (
               <Link
@@ -146,7 +146,7 @@ export default function HomePage() {
           <p className="text-sm leading-relaxed" style={{ color: "var(--text-default)" }}>
             Mersul Trenurilor la Zi agregheza orarul complet al trenurilor CFR de calatori si iti arata
             in cateva secunde cel mai rapid tren, varianta directa fara schimbari si cel mai ieftin bilet
-            disponibil &mdash; plus statusul live si intarzierile in timp real. Cauta rute intre{" "}
+            disponibil &mdash; plus estimari de status si intarziere calculate din orar. Cauta rute intre{" "}
             <Link href="/statii" style={{ color: "var(--color-info)" }}>orice gari din Romania</Link>,
             vizualizeaza plecarile si sosirile, urmareste un tren individual si ajunge rapid la{" "}
             <Link href="/cautare" style={{ color: "var(--color-info)" }}>cumpararea biletului</Link>.

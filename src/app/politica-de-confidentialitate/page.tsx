@@ -16,7 +16,7 @@ export default function Page() {
       <h1 className="text-2xl font-bold text-strong md:text-3xl">Politica de confidențialitate</h1>
       <div className="mt-4 max-w-2xl space-y-4 text-body">
 
-        <p>Ultima actualizare: iunie 2025. Operatorul acestui site respectă Regulamentul (UE) 2016/679 (GDPR) și legislația română privind protecția datelor cu caracter personal.</p>
+        <p>Ultima actualizare: iulie 2026. Operatorul acestui site respectă Regulamentul (UE) 2016/679 (GDPR) și legislația română privind protecția datelor cu caracter personal.</p>
 
         <h2 className="text-lg font-semibold text-strong">1. Cine suntem</h2>
         <p>Mersul Trenurilor la Zi este un serviciu informativ independent pentru călătorii feroviare în România, disponibil la adresa <strong>mersultrenurilorlazi.ro</strong>. Nu suntem afiliat oficial cu CFR Călători sau Infofer.</p>

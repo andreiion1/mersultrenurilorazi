@@ -7,8 +7,8 @@ const RESURSE = [
   { href: "/mersul-trenurilor", label: "Mersul trenurilor" },
   { href: "/trenuri-azi",       label: "Trenuri azi" },
   { href: "/trenuri-maine",     label: "Trenuri maine" },
-  { href: "/intarzieri-trenuri", label: "Intarzieri live" },
-  { href: "/harta-trenuri-live", label: "Harta live" },
+  { href: "/intarzieri-trenuri", label: "Intarzieri" },
+  { href: "/harta-trenuri-live", label: "Harta trenuri" },
   { href: "/blog",              label: "Blog" },
 ];
 
@@ -109,9 +109,18 @@ export function Footer() {
               Mersul Trenurilor <span style={{ color: "var(--color-primary)" }}>la Zi</span>
             </span>
           </div>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.22)" }}>
-            &copy; {new Date().getFullYear()} Mersul Trenurilor la Zi &middot; Informatii orientative &middot; Verificati sursa oficiala inainte de calatorie.
-          </p>
+          <div className="flex flex-col gap-1 text-xs sm:items-end" style={{ color: "rgba(255,255,255,0.22)" }}>
+            <p>
+              &copy; {new Date().getFullYear()} Mersul Trenurilor la Zi &middot; Informatii orientative &middot; Verificati sursa oficiala inainte de calatorie.
+            </p>
+            <p>
+              Orar: <a href="https://data.gov.ro/organization/sc-informatica-feroviara-sa" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">data.gov.ro</a>
+              {" "}&middot;{" "}
+              <a href="https://creativecommons.org/licenses/by/4.0/deed.ro" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">CC BY 4.0</a>
+              {" "}&middot;{" "}
+              <Link href="/surse-de-date" className="underline hover:text-primary">Surse de date</Link>
+            </p>
+          </div>
         </Container>
       </div>
     </footer>
