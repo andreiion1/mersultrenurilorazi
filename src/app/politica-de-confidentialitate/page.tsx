@@ -5,7 +5,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Politica de confidențialitate",
-  description: "Cum tratăm datele personale pe Mersul Trenurilor Azi.",
+  description: "Cum tratăm datele personale pe Mersul Trenurilor la Zi.",
   path: "/politica-de-confidentialitate",
 });
 
@@ -19,7 +19,7 @@ export default function Page() {
         <p>Ultima actualizare: iunie 2025. Operatorul acestui site respectă Regulamentul (UE) 2016/679 (GDPR) și legislația română privind protecția datelor cu caracter personal.</p>
 
         <h2 className="text-lg font-semibold text-strong">1. Cine suntem</h2>
-        <p>Mersul Trenurilor Azi este un serviciu informativ independent pentru călătorii feroviare în România, disponibil la adresa <strong>mersultrenurilorlazi.ro</strong>. Nu suntem afiliat oficial cu CFR Călători sau Infofer.</p>
+        <p>Mersul Trenurilor la Zi este un serviciu informativ independent pentru călătorii feroviare în România, disponibil la adresa <strong>mersultrenurilorlazi.ro</strong>. Nu suntem afiliat oficial cu CFR Călători sau Infofer.</p>
 
         <h2 className="text-lg font-semibold text-strong">2. Ce date colectăm</h2>
         <p><strong>Date pe care NU le colectăm:</strong> nu solicităm cont, nu stocăm email, nume sau orice date cu caracter personal pe serverele noastre.</p>

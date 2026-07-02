@@ -5,7 +5,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Surse de date",
-  description: "Transparență privind sursele de date folosite de Mersul Trenurilor Azi.",
+  description: "Transparență privind sursele de date folosite de Mersul Trenurilor la Zi.",
   path: "/surse-de-date",
 });
 

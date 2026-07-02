@@ -5,7 +5,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Termeni și condiții",
-  description: "Termenii și condițiile de utilizare a site-ului Mersul Trenurilor Azi.",
+  description: "Termenii și condițiile de utilizare a site-ului Mersul Trenurilor la Zi.",
   path: "/termeni-si-conditii",
 });
 
@@ -19,7 +19,7 @@ export default function Page() {
         <p>Ultima actualizare: iunie 2025. Prin utilizarea site-ului <strong>mersultrenurilorlazi.ro</strong> ești de acord cu termenii de mai jos.</p>
 
         <h2 className="text-lg font-semibold text-strong">1. Serviciul oferit</h2>
-        <p>Mersul Trenurilor Azi este un agregator informativ independent. Furnizăm informații de orar feroviar, estimări de întârzieri și link-uri de redirecționare către serviciile oficiale de cumpărare bilete. Nu suntem un operator de transport și nu vindem bilete.</p>
+        <p>Mersul Trenurilor la Zi este un agregator informativ independent. Furnizăm informații de orar feroviar, estimări de întârzieri și link-uri de redirecționare către serviciile oficiale de cumpărare bilete. Nu suntem un operator de transport și nu vindem bilete.</p>
 
         <h2 className="text-lg font-semibold text-strong">2. Acuratețea informațiilor</h2>
         <p>Datele de orar provin din seturi de date publice (data.gov.ro — CFR Călători). Depunem eforturi rezonabile pentru acuratețe, însă <strong>nu garantăm corectitudinea, completitudinea sau actualitatea</strong> informațiilor afișate. Orarul feroviar se poate modifica fără preaviz. Prețurile afișate sunt estimative.</p>

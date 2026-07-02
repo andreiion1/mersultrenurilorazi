@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/Container";
 import { SearchBox } from "@/components/SearchBox";
@@ -6,6 +7,11 @@ import { getPopularRoutes } from "@/data/routes";
 import { majorStations } from "@/data/stations";
 import { search, todayISO } from "@/lib/schedule";
 import { TrainResultCard } from "@/components/TrainResultCard";
+
+// Homepage: canonical pe propriul URL (rădăcina). Titlul rămâne cel implicit din layout.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const routes = getPopularRoutes();
@@ -33,7 +39,7 @@ export default function HomePage() {
             className="mb-2 text-center text-3xl font-bold leading-tight md:text-4xl"
             style={{ color: "#ffffff" }}
           >
-            Mersul trenurilor azi &mdash;{" "}
+            Mersul trenurilor la zi &mdash;{" "}
             <span style={{ color: "var(--color-primary)" }}>clar si rapid.</span>
           </h1>
 
@@ -138,7 +144,7 @@ export default function HomePage() {
             Mersul trenurilor in Romania &mdash; tot ce trebuie sa stii
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: "var(--text-default)" }}>
-            Mersul Trenurilor Azi agregheza orarul complet al trenurilor CFR de calatori si iti arata
+            Mersul Trenurilor la Zi agregheza orarul complet al trenurilor CFR de calatori si iti arata
             in cateva secunde cel mai rapid tren, varianta directa fara schimbari si cel mai ieftin bilet
             disponibil &mdash; plus statusul live si intarzierile in timp real. Cauta rute intre{" "}
             <Link href="/statii" style={{ color: "var(--color-info)" }}>orice gari din Romania</Link>,

@@ -33,10 +33,10 @@ export function Header() {
             <path d="M9 19l-2 2M15 19l2 2M9 19h6" />
           </svg>
           <span className="hidden sm:inline">
-            Mersul Trenurilor<span style={{ color: "var(--color-primary)" }}> Azi</span>
+            Mersul Trenurilor<span style={{ color: "var(--color-primary)" }}> la Zi</span>
           </span>
           <span className="sm:hidden">
-            MT<span style={{ color: "var(--color-primary)" }}>Azi</span>
+            MT<span style={{ color: "var(--color-primary)" }}> la Zi</span>
           </span>
         </Link>
 

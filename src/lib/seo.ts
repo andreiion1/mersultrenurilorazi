@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "Mersul Trenurilor Azi",
+  name: "Mersul Trenurilor la Zi",
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://mersultrenurilorlazi.ro",
   defaultDescription:
     "Caută mersul trenurilor între orice stații din România. Orar complet, întârzieri, trenuri azi și mâine, bilete. Rapid pe mobil.",

@@ -106,11 +106,11 @@ export function Footer() {
               <path d="M4 10h16M9 19l-2 2M15 19l2 2M9 19h6" />
             </svg>
             <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.35)" }}>
-              Mersul Trenurilor <span style={{ color: "var(--color-primary)" }}>Azi</span>
+              Mersul Trenurilor <span style={{ color: "var(--color-primary)" }}>la Zi</span>
             </span>
           </div>
           <p className="text-xs" style={{ color: "rgba(255,255,255,0.22)" }}>
-            &copy; {new Date().getFullYear()} Mersul Trenurilor Azi &middot; Informatii orientative &middot; Verificati sursa oficiala inainte de calatorie.
+            &copy; {new Date().getFullYear()} Mersul Trenurilor la Zi &middot; Informatii orientative &middot; Verificati sursa oficiala inainte de calatorie.
           </p>
         </Container>
       </div>

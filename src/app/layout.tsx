@@ -9,8 +9,8 @@ import { websiteSchema, SITE } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "Mersul Trenurilor Azi — Orar Trenuri CFR, Întârzieri și Bilete",
-    template: "%s | Mersul Trenurilor Azi",
+    default: "Mersul Trenurilor la Zi — Orar Trenuri CFR, Întârzieri și Bilete",
+    template: "%s | Mersul Trenurilor la Zi",
   },
   description: SITE.defaultDescription,
   applicationName: SITE.name,

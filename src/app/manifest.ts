@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Mersul Trenurilor Azi",
-    short_name: "MT Azi",
+    name: "Mersul Trenurilor la Zi",
+    short_name: "MT la Zi",
     description: "Orar trenuri, întârzieri și bilete în România.",
     start_url: "/",
     display: "standalone",
