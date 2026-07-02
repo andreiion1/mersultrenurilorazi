@@ -57,16 +57,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold text-strong md:text-3xl">Tren <CategoryTag category={t.category} /> {t.number}</h1>
         <StatusBadge status={status} />
-        <Link
-          href={`/harta-trenuri-live?tren=${t.slug}`}
-          className="ml-auto inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
-          style={{ backgroundColor: "var(--color-primary)", color: "var(--color-navy)" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" /><line x1="9" y1="3" x2="9" y2="18" /><line x1="15" y1="6" x2="15" y2="21" />
-          </svg>
-          Vezi pe hart\u0103
-        </Link>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <a
+            href={`https://mersultrenurilor.infofer.ro/ro-RO/Tren/${encodeURIComponent(t.number)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
+            style={{ backgroundColor: "transparent", color: "var(--color-primary)", border: "1.5px solid var(--color-primary)" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+            Status live pe Infofer
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M7 17 17 7M9 7h8v8" />
+            </svg>
+          </a>
+          <Link
+            href={`/harta-trenuri-live?tren=${t.slug}`}
+            className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
+            style={{ backgroundColor: "var(--color-primary)", color: "var(--color-navy)" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" /><line x1="9" y1="3" x2="9" y2="18" /><line x1="15" y1="6" x2="15" y2="21" />
+            </svg>
+            Vezi pe hart\u0103
+          </Link>
+        </div>
       </div>
       {t.name && <p className="mt-1 text-muted">\u201e{t.name}\u201d \u00b7 {op?.name}</p>}
 
