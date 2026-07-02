@@ -3,7 +3,7 @@ import { JsonLd } from "./JsonLd";
 
 export interface Crumb { name: string; href?: string; }
 
-const SITE = "https://mersultrenurilorazi.ro";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://mersultrenurilorlazi.ro";
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const schema = {

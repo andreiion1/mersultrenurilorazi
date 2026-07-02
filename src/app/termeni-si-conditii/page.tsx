@@ -16,7 +16,7 @@ export default function Page() {
       <h1 className="text-2xl font-bold text-strong md:text-3xl">Termeni și condiții</h1>
       <div className="mt-4 max-w-2xl space-y-4 text-body">
 
-        <p>Ultima actualizare: iunie 2025. Prin utilizarea site-ului <strong>mersultrenurilorazi.ro</strong> ești de acord cu termenii de mai jos.</p>
+        <p>Ultima actualizare: iunie 2025. Prin utilizarea site-ului <strong>mersultrenurilorlazi.ro</strong> ești de acord cu termenii de mai jos.</p>
 
         <h2 className="text-lg font-semibold text-strong">1. Serviciul oferit</h2>
         <p>Mersul Trenurilor Azi este un agregator informativ independent. Furnizăm informații de orar feroviar, estimări de întârzieri și link-uri de redirecționare către serviciile oficiale de cumpărare bilete. Nu suntem un operator de transport și nu vindem bilete.</p>

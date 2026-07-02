@@ -64,7 +64,7 @@ export async function fetchLiveStatus(trainNumber: string, dateISO: string): Pro
     const timer = setTimeout(() => ctrl.abort(), 4000);
     const res = await fetch(irisUrl(trainNumber, dateISO), {
       signal: ctrl.signal,
-      headers: { "User-Agent": "mersultrenurilorazi.ro (status informativ)" },
+      headers: { "User-Agent": "mersultrenurilorlazi.ro (status informativ)" },
       cache: "no-store",
     });
     clearTimeout(timer);
