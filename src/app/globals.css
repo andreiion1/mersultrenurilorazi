@@ -204,3 +204,13 @@ body {
 .input-dark::placeholder {
   color: rgba(255, 255, 255, 0.3);
 }
+
+/* Previne zoom-ul automat pe iOS/Safari la focus în inputuri.
+   Safari face zoom dacă font-size < 16px și nu revine — forțăm 16px pe mobil. */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
