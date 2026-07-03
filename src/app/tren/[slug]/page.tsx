@@ -8,6 +8,8 @@ import { CategoryTag } from "@/components/Badges";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { TrainPositionMap } from "@/components/TrainPositionMap";
+import { trainMapData } from "@/lib/trainMap";
 import { trains, trainBySlug } from "@/data/trains";
 import { stationBySlug } from "@/data/stations";
 import { operatorBySlug } from "@/data/operators";
@@ -46,6 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const arrLast = t.stops[t.stops.length - 1].arr ?? t.stops[t.stops.length - 1].dep!;
   const total = durationBetween(depFirst, arrLast);
   const riskLabel = hist.riskLevel === 1 ? "mic" : hist.riskLevel === 2 ? "mediu" : "mare";
+  const mapData = trainMapData(t.slug);
 
   const faq = [
     { q: `Pe ce rută circulă trenul ${t.category} ${t.number}?`, a: `Trenul circulă pe ruta ${origin.name} – ${dest.name}, cu durata de aproximativ ${formatDuration(total)}.` },
@@ -95,6 +98,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <Stat label="Punctualitate" value={`~${hist.onTimePct}%`} />
         <Stat label="Risc întârziere" value={riskLabel} />
       </div>
+
+      {mapData.route.length >= 2 && (
+        <>
+          <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Unde e trenul acum</h2>
+          <TrainPositionMap route={mapData.route} slug={t.slug} category={t.category} number={t.number} />
+        </>
+      )}
 
       <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Traseu şi opriri</h2>
       <ol className="relative space-y-0 border-l-2 border-line pl-6">
