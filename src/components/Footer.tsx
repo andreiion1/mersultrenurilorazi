@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "./Container";
+import { CookieSettingsButton } from "./CookieSettingsButton";
 import { getPopularRoutes } from "@/data/routes";
 import { majorStations } from "@/data/stations";
 
@@ -91,6 +92,7 @@ export function Footer() {
               {COMPANIE.map(({ href, label }) => (
                 <FooterLink key={href} href={href}>{label}</FooterLink>
               ))}
+              <CookieSettingsButton />
             </ul>
           </div>
         </div>

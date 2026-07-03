@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
+import { CookieConsent } from "@/components/CookieConsent";
 import { JsonLd } from "@/components/JsonLd";
 import { websiteSchema, SITE } from "@/lib/seo";
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-[60vh] pb-20 lg:pb-0">{children}</main>
         <Footer />
         <BottomNav />
+        <CookieConsent />
       </body>
     </html>
   );
