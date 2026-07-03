@@ -7,6 +7,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { CategoryTag } from "@/components/Badges";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { trains, trainBySlug } from "@/data/trains";
 import { stationBySlug } from "@/data/stations";
 import { operatorBySlug } from "@/data/operators";
@@ -57,6 +58,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold text-strong md:text-3xl">Tren <CategoryTag category={t.category} /> {t.number}</h1>
         <StatusBadge status={status} />
+        <FavoriteButton variant="icon" item={{ kind: "train", slug: t.slug, label: `${t.category} ${t.number}${t.name ? ` · ${t.name}` : ""}`, sub: `${origin.city} → ${dest.city}`, href: `/tren/${t.slug}` }} />
         <div className="ml-auto flex flex-wrap items-center gap-2">
           <a
             href={`https://mersultrenurilor.infofer.ro/ro-RO/Tren/${encodeURIComponent(t.number)}`}

@@ -8,6 +8,7 @@ import { ResultsControls } from "@/components/ResultsControls";
 import { DateNav } from "@/components/DateNav";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
 import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
 import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
@@ -72,7 +73,10 @@ export default async function Page({ params, searchParams }: Props) {
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Rute", href: "/rute" }, { name: `${r.fromCity}–${r.toCity}` }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Tren {r.fromCity} – {r.toCity}: orar, durată și bilete</h1>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <h1 className="text-2xl font-bold text-strong md:text-3xl">Tren {r.fromCity} – {r.toCity}: orar, durată și bilete</h1>
+        <FavoriteButton item={{ kind: "route", slug: r.slug, label: `${r.fromCity} – ${r.toCity}`, sub: "Rută", href: `/rute/${r.slug}` }} />
+      </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Trenuri/zi" value={`${r.dailyTrainsCount}`} />

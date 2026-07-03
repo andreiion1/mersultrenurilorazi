@@ -5,6 +5,7 @@ import { Container } from "@/components/Container";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Board } from "@/components/Board";
 import { StationMap } from "@/components/StationMap";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { stations, stationBySlug, majorStations } from "@/data/stations";
@@ -45,8 +46,13 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Gări", href: "/statii" }, { name: s.name }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Gara {s.name} — plecări, sosiri şi orar trenuri</h1>
-      <p className="mt-1 text-muted">{s.city}, județul {s.county}</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-strong md:text-3xl">Gara {s.name} — plecări, sosiri şi orar trenuri</h1>
+          <p className="mt-1 text-muted">{s.city}, județul {s.county}</p>
+        </div>
+        <FavoriteButton item={{ kind: "station", slug: s.slug, label: `Gara ${s.name}`, sub: s.city, href: `/statii/${s.slug}` }} />
+      </div>
 
       <div className="mt-5 inline-flex rounded-md border border-line bg-card p-1">
         <Link href={`/statii/${s.slug}?tab=plecari`} className={`rounded px-4 py-1.5 text-sm font-medium ${tab === "plecari" ? "bg-primary text-white" : "text-body"}`}>Plecări</Link>
