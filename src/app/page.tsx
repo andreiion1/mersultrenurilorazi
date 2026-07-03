@@ -96,9 +96,14 @@ export default function HomePage() {
       </Container>
 
       <Container className="pb-8">
-        <h2 className="mb-3 text-lg font-bold" style={{ color: "var(--text-strong)" }}>
-          Gari principale
-        </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-bold" style={{ color: "var(--text-strong)" }}>
+            Gari principale
+          </h2>
+          <Link href="/statii" className="text-xs font-medium" style={{ color: "var(--color-info)" }}>
+            Vezi toate &rarr;
+          </Link>
+        </div>
         <div className="flex flex-wrap gap-2">
           {stations.map((s) => (
             <Link
