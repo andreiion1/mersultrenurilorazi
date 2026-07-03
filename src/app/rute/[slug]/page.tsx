@@ -10,7 +10,7 @@ import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { RouteAnimatedMap } from "@/components/RouteAnimatedMap";
-import { stationBySlug } from "@/data/stations";
+import { routeWaypoints } from "@/lib/routePath";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
 import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
 import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
@@ -46,9 +46,8 @@ export default async function Page({ params, searchParams }: Props) {
   const r = getRouteBySlug(slug);
   if (!r) notFound();
 
-  const fromSt = stationBySlug(r.fromSlug);
-  const toSt = stationBySlug(r.toSlug);
-  const showRouteMap = !!(fromSt && toSt && fromSt.lat && fromSt.lng && toSt.lat && toSt.lng);
+  const routePts = routeWaypoints(r.fromSlug, r.toSlug);
+  const showRouteMap = routePts.length >= 2;
 
   const today = todayISO();
   const tomorrow = tomorrowISO();
@@ -93,10 +92,7 @@ export default async function Page({ params, searchParams }: Props) {
 
       {showRouteMap && (
         <div className="mt-6">
-          <RouteAnimatedMap
-            from={{ lat: fromSt!.lat, lng: fromSt!.lng, name: fromSt!.name }}
-            to={{ lat: toSt!.lat, lng: toSt!.lng, name: toSt!.name }}
-          />
+          <RouteAnimatedMap points={routePts} />
         </div>
       )}
 
