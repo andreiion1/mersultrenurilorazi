@@ -155,7 +155,7 @@ export function RouteAnimatedMap({ points }: { points: Pt[] }) {
   if (points.length < 2) return null;
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line">
+    <div className="relative z-0 overflow-hidden rounded-lg border border-line" style={{ isolation: "isolate" }}>
       <style>{`
         .route-arrow{background:transparent;border:none}
         .route-lbl{background:${NAVY};color:#fff;border:none;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.25)}

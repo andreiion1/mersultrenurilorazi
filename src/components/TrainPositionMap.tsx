@@ -124,7 +124,7 @@ export function TrainPositionMap({ route, slug, category, number }: {
 
   return (
     <div>
-      <div className="overflow-hidden rounded-lg border border-line">
+      <div className="relative z-0 overflow-hidden rounded-lg border border-line" style={{ isolation: "isolate" }}>
         <style>{`.train-pos-arrow{background:transparent;border:none}`}</style>
         <div ref={elRef} className="h-[300px] w-full bg-subtle md:h-[360px]" />
       </div>

@@ -137,7 +137,7 @@ export function MapLive({ stations, focus }: { stations: GeoStation[]; focus?: F
   }, []);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line">
+    <div className="relative z-0 overflow-hidden rounded-lg border border-line" style={{ isolation: "isolate" }}>
       <style>{`.train-arrow{background:transparent;border:none;}`}</style>
       <div ref={mapEl} className="h-[420px] w-full bg-subtle md:h-[560px]" />
       <div className="flex items-center justify-between gap-2 border-t border-line bg-card px-3 py-2 text-xs text-muted">
