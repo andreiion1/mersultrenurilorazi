@@ -68,9 +68,11 @@ export function Board({ rows, mode }: { rows: BoardRow[]; mode: "departures" | "
                     </Link>
                   </td>
                   <td className="w-full md:w-auto md:px-4 md:py-2.5">
-                    <span className="font-bold uppercase tracking-wide" style={{ color: TXT }}>
+                    <Link href={`/statii/${mode === "departures" ? r.towardsSlug : r.fromSlug}`}
+                      className="font-bold uppercase tracking-wide hover:underline"
+                      style={{ color: TXT }}>
                       {mode === "departures" ? r.towardsName : r.fromName}
-                    </span>
+                    </Link>
                   </td>
                   <td className="md:px-4 md:py-2.5">
                     <span style={{ color: HEAD_COL, fontVariantNumeric: "tabular-nums" }}>{r.platform ?? "—"}</span>

@@ -253,7 +253,9 @@ export interface BoardRow {
   category: Train["category"];
   number: string;
   towardsName: string;
+  towardsSlug: string;
   fromName: string;
+  fromSlug: string;
   platform?: string;
   operatorSlug: string;
   status: RunStatus;
@@ -275,7 +277,9 @@ export function departures(stationSlug: string, dateISO: string): BoardRow[] {
       time,
       trainSlug: t.slug, category: t.category, number: t.number,
       towardsName: stationBySlug(dest.stationSlug)?.name ?? dest.stationSlug,
+      towardsSlug: dest.stationSlug,
       fromName: stationBySlug(stationSlug)?.name ?? stationSlug,
+      fromSlug: stationSlug,
       platform: stop.platform, operatorSlug: t.operatorSlug,
       status: mockStatus(t.slug, dateISO),
     });
@@ -298,7 +302,9 @@ export function arrivals(stationSlug: string, dateISO: string): BoardRow[] {
       time,
       trainSlug: t.slug, category: t.category, number: t.number,
       towardsName: stationBySlug(stationSlug)?.name ?? stationSlug,
+      towardsSlug: stationSlug,
       fromName: stationBySlug(origin.stationSlug)?.name ?? origin.stationSlug,
+      fromSlug: origin.stationSlug,
       platform: stop.platform, operatorSlug: t.operatorSlug,
       status: mockStatus(t.slug, dateISO),
     });
