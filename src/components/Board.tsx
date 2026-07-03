@@ -39,7 +39,7 @@ export function Board({ rows, mode }: { rows: BoardRow[]; mode: "departures" | "
 
       {rows.length === 0 ? (
         <p className="px-4 py-8 text-center" style={{ color: HEAD_COL, fontFamily: MONO }}>
-          Nu sunt {mode === "departures" ? "plecări" : "sosiri"} programate în intervalul selectat.
+          Nu sunt {mode === "departures" ? "plecări" : "sosiri"} programate pentru această zi.
         </p>
       ) : (
         <div className="relative">

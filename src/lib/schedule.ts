@@ -267,10 +267,12 @@ export function departures(stationSlug: string, dateISO: string): BoardRow[] {
     const i = stopIndex(t, stationSlug);
     if (i === -1 || i === t.stops.length - 1) continue; // nu e plecare dacă e ultima stație
     const stop = t.stops[i];
-    if (!stop.dep) continue;
+    // Orarul are adesea doar ora de sosire la gările de tranzit → folosim dep ?? arr.
+    const time = stop.dep ?? stop.arr;
+    if (!time) continue;
     const dest = t.stops[t.stops.length - 1];
     rows.push({
-      time: stop.dep,
+      time,
       trainSlug: t.slug, category: t.category, number: t.number,
       towardsName: stationBySlug(dest.stationSlug)?.name ?? dest.stationSlug,
       fromName: stationBySlug(stationSlug)?.name ?? stationSlug,
@@ -289,10 +291,11 @@ export function arrivals(stationSlug: string, dateISO: string): BoardRow[] {
     const i = stopIndex(t, stationSlug);
     if (i <= 0) continue; // nu e sosire dacă e prima stație
     const stop = t.stops[i];
-    if (!stop.arr) continue;
+    const time = stop.arr ?? stop.dep;
+    if (!time) continue;
     const origin = t.stops[0];
     rows.push({
-      time: stop.arr,
+      time,
       trainSlug: t.slug, category: t.category, number: t.number,
       towardsName: stationBySlug(stationSlug)?.name ?? stationSlug,
       fromName: stationBySlug(origin.stationSlug)?.name ?? origin.stationSlug,
