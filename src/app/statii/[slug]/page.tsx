@@ -5,11 +5,13 @@ import { Container } from "@/components/Container";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Board } from "@/components/Board";
 import { StationMap } from "@/components/StationMap";
+import { StationStats } from "@/components/StationStats";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { stations, stationBySlug, majorStations } from "@/data/stations";
 import { departures, arrivals, todayISO } from "@/lib/schedule";
+import { stationStats } from "@/lib/stationStats";
 import { pageMeta, faqSchema, stationSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -67,6 +69,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         <Link href={`/plecari/${s.slug}`} className="font-medium text-primary hover:underline">Toate plecările →</Link>
         <Link href={`/sosiri/${s.slug}`} className="font-medium text-primary hover:underline">Toate sosirile →</Link>
       </div>
+
+      <StationStats name={s.name} stats={stationStats(s.slug)} />
 
       {dests.length > 0 && (
         <>
