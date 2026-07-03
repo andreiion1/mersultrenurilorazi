@@ -9,6 +9,8 @@ import { DateNav } from "@/components/DateNav";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { RouteAnimatedMap } from "@/components/RouteAnimatedMap";
+import { stationBySlug } from "@/data/stations";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
 import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
 import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
@@ -43,6 +45,10 @@ export default async function Page({ params, searchParams }: Props) {
   const sp = await searchParams;
   const r = getRouteBySlug(slug);
   if (!r) notFound();
+
+  const fromSt = stationBySlug(r.fromSlug);
+  const toSt = stationBySlug(r.toSlug);
+  const showRouteMap = !!(fromSt && toSt && fromSt.lat && fromSt.lng && toSt.lat && toSt.lng);
 
   const today = todayISO();
   const tomorrow = tomorrowISO();
@@ -84,6 +90,15 @@ export default async function Page({ params, searchParams }: Props) {
         <Stat label="Distanță" value={`${r.distanceKm} km`} />
         <Stat label="Operatori" value={r.operators.join(", ") || "—"} />
       </div>
+
+      {showRouteMap && (
+        <div className="mt-6">
+          <RouteAnimatedMap
+            from={{ lat: fromSt!.lat, lng: fromSt!.lng, name: fromSt!.name }}
+            to={{ lat: toSt!.lat, lng: toSt!.lng, name: toSt!.name }}
+          />
+        </div>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold capitalize text-strong">Trenuri {dateLabel}</h2>
