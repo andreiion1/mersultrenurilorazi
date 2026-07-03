@@ -6,7 +6,7 @@ import { getAllDirectRoutes } from "@/data/routes";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Rute de tren în România — orar și bilete",
+  title: "Rute de tren în România: orar și bilete",
   description: "Toate rutele de tren disponibile: orar, durată, distanță și bilete între gările din România.",
   path: "/rute",
 });

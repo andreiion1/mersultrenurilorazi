@@ -10,7 +10,7 @@ import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/res
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Caută rută de tren — orar și bilete",
+  title: "Caută rută de tren, orar și bilete",
   description: "Caută trenuri între două stații din România: directe și cu schimbări, durată, preț și status.",
   path: "/cautare",
   noindex: true,
@@ -87,7 +87,7 @@ export default async function SearchPage({ searchParams }: Props) {
                   list.map((r, i) => <TrainResultCard key={i} r={r} />)
                 ) : (
                   <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
-                    Nu există trenuri directe la această dată — dezactivează filtrul ca să vezi variantele cu schimbare.
+                    Nu există trenuri directe la această dată. Dezactivează filtrul ca să vezi variantele cu schimbare.
                   </p>
                 )}
               </div>

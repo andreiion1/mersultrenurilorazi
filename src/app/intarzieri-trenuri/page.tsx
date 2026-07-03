@@ -14,7 +14,7 @@ import { AlertIcon } from "@/components/Icons";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMeta({
-  title: "Întârzieri Trenuri Azi — Status CFR",
+  title: "Întârzieri Trenuri Azi: Status CFR",
   description: "Întârzierile trenurilor din România. Trenuri cu întârziere azi pe rute principale, cu status actualizat.",
   path: "/intarzieri-trenuri",
 });
@@ -29,7 +29,7 @@ export default function Page() {
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Întârzieri" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Întârzieri trenuri în România — status azi</h1>
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Întârzieri trenuri în România: status azi</h1>
 
       {!IRIS_ENABLED && (
         <div className="mt-3 flex items-start gap-2 rounded-md border border-warning bg-warning-bg/40 p-3 text-sm text-body">

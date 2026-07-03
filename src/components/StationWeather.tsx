@@ -18,7 +18,7 @@ function wmo(code: number): { label: string; icon: IconKind } {
   if (code >= 80 && code <= 82) return { label: "Averse", icon: "rain" };
   if (code >= 85 && code <= 86) return { label: "Averse de ninsoare", icon: "snow" };
   if (code >= 95) return { label: "Furtună", icon: "storm" };
-  return { label: "—", icon: "cloud" };
+  return { label: "-", icon: "cloud" };
 }
 
 type IconKind = "sun" | "partly" | "cloud" | "fog" | "rain" | "snow" | "storm";

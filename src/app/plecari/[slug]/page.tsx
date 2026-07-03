@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const s = stationBySlug(slug);
   if (!s) return pageMeta({ title: "Indisponibil", description: "", path: `/plecari/${slug}`, noindex: true });
   return pageMeta({
-    title: `Plecări Gara ${s.name} — Orar Trenuri Azi și Întârzieri`,
+    title: `Plecări Gara ${s.name}: Orar Trenuri Azi și Întârzieri`,
     description: `Toate plecările din Gara ${s.name} azi: ore, destinații, peroane, întârzieri și status.`,
     path: `/plecari/${s.slug}`,
     noindex: !s.isMajor,
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Gări", href: "/statii" }, { name: s.name, href: `/statii/${s.slug}` }, { name: "Plecări" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Plecări trenuri din Gara {s.name} — azi</h1>
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Plecări trenuri azi din Gara {s.name}</h1>
       <div className="mt-4"><Board rows={rows} mode="departures" /></div>
     </Container>
   );

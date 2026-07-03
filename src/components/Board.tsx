@@ -75,7 +75,7 @@ export function Board({ rows, mode }: { rows: BoardRow[]; mode: "departures" | "
                     </Link>
                   </td>
                   <td className="md:px-4 md:py-2.5">
-                    <span style={{ color: HEAD_COL, fontVariantNumeric: "tabular-nums" }}>{r.platform ?? "—"}</span>
+                    <span style={{ color: HEAD_COL, fontVariantNumeric: "tabular-nums" }}>{r.platform ?? "-"}</span>
                   </td>
                   <td className="md:px-4 md:py-2.5">
                     <StatusCell status={r.status} />
@@ -86,9 +86,4 @@ export function Board({ rows, mode }: { rows: BoardRow[]; mode: "departures" | "
           </table>
           {/* textură LED subtilă (scanlines) */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 3px)" }} />
-        </div>
-      )}
-    </div>
-  );
-}
+            style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,25

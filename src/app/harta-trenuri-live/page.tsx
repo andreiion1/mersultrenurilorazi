@@ -12,7 +12,7 @@ import { pageMeta } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMeta({
-  title: "Hartă Trenuri — Trenurile din România pe Hartă",
+  title: "Harta trenurilor din România",
   description: "Vezi trenurile din România pe hartă. Poziții aproximative, calculate din orar, cu direcția de mers pe rutele principale.",
   path: "/harta-trenuri-live",
 });
@@ -40,7 +40,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
           <CategoryTag category={focus.category} />
           <span className="font-semibold text-strong">{focus.number}{focus.name ? ` · ${focus.name}` : ""}</span>
           <span className="text-muted">
-            {focus.position ? "— afișat pe hartă (în mișcare acum)" : focus.runsToday ? "— nu e activ acum; traseul e afișat pe hartă" : "— nu circulă azi; traseul e afișat pe hartă"}
+            {focus.position ? "afișat pe hartă (în mișcare acum)" : focus.runsToday ? "nu e activ acum; traseul e afișat pe hartă" : "nu circulă azi; traseul e afișat pe hartă"}
           </span>
           <Link href="/harta-trenuri-live" className="ml-auto text-primary hover:underline">Vezi toate trenurile</Link>
         </div>

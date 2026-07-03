@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const r = getRouteBySlug(slug);
   if (!r) return pageMeta({ title: "Rută indisponibilă", description: "", path: `/rute/${slug}`, noindex: true });
   return pageMeta({
-    title: `Tren ${r.fromCity} ${r.toCity} — Orar, Preț Bilet și Durată ${YEAR}`,
+    title: `Tren ${r.fromCity} ${r.toCity}: Orar, Preț Bilet și Durată ${YEAR}`,
     description: `Toate trenurile ${r.fromCity}–${r.toCity} azi și mâine. ${r.dailyTrainsCount} trenuri/zi, durată de la ${formatDuration(r.minDurationMin)}, ${r.distanceKm} km. Directe și cu schimbări. Cumpără bilet.`,
     path: `/rute/${r.slug}`,
     noindex: !r.hasDirect,
@@ -87,7 +87,7 @@ export default async function Page({ params, searchParams }: Props) {
         <Stat label="Trenuri/zi" value={`${r.dailyTrainsCount}`} />
         <Stat label="Cel mai rapid" value={formatDuration(r.minDurationMin)} />
         <Stat label="Distanță" value={`${r.distanceKm} km`} />
-        <Stat label="Operatori" value={r.operators.join(", ") || "—"} />
+        <Stat label="Operatori" value={r.operators.join(", ") || "-"} />
       </div>
 
       {showRouteMap && (
@@ -128,7 +128,7 @@ export default async function Page({ params, searchParams }: Props) {
         {list.length === 0 && (
           <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
             {directOnly && result.all.length > 0
-              ? "Nu există trenuri directe la această dată — vezi variantele cu schimbare dezactivând filtrul."
+              ? "Nu există trenuri directe la această dată. Vezi variantele cu schimbare dezactivând filtrul."
               : `Nu circulă trenuri pe această rută ${dateLabel}. Alege altă dată.`}
           </p>
         )}
@@ -146,17 +146,4 @@ export default async function Page({ params, searchParams }: Props) {
       </div>
 
       <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
-      <Faq items={faq} />
-      <JsonLd data={faqSchema(faq)} />
-    </Container>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-line bg-card p-3">
-      <div className="text-xs text-muted">{label}</div>
-      <div className="mt-0.5 font-bold text-strong">{value}</div>
-    </div>
-  );
-}
+      <Faq items={faq} /

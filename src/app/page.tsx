@@ -39,7 +39,7 @@ export default function HomePage() {
             className="mb-2 text-center text-3xl font-bold leading-tight md:text-4xl"
             style={{ color: "#ffffff" }}
           >
-            Mersul trenurilor la zi &mdash;{" "}
+            Mersul trenurilor la zi,{" "}
             <span style={{ color: "var(--color-primary)" }}>clar si rapid.</span>
           </h1>
 
@@ -47,7 +47,7 @@ export default function HomePage() {
             className="mx-auto mb-8 max-w-xl text-center text-sm leading-relaxed"
             style={{ color: "rgba(255,255,255,0.50)" }}
           >
-            Cauta orice tren din Romania. Orar, intarzieri si bilete &mdash;
+            Cauta orice tren din Romania. Orar, intarzieri si bilete,
             mai simplu decat site-urile oficiale.
           </p>
 
@@ -146,22 +146,14 @@ export default function HomePage() {
           style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)" }}
         >
           <h2 className="mb-2 text-base font-bold" style={{ color: "var(--text-strong)" }}>
-            Mersul trenurilor in Romania &mdash; tot ce trebuie sa stii
+            Mersul trenurilor in Romania: tot ce trebuie sa stii
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: "var(--text-default)" }}>
             Mersul Trenurilor la Zi agregheza orarul complet al trenurilor CFR de calatori si iti arata
             in cateva secunde cel mai rapid tren, varianta directa fara schimbari si cel mai ieftin bilet
-            disponibil &mdash; plus estimari de status si intarziere calculate din orar. Cauta rute intre{" "}
+            disponibil, plus estimari de status si intarziere calculate din orar. Cauta rute intre{" "}
             <Link href="/statii" style={{ color: "var(--color-info)" }}>orice gari din Romania</Link>,
             vizualizeaza plecarile si sosirile, urmareste un tren individual si ajunge rapid la{" "}
             <Link href="/cautare" style={{ color: "var(--color-info)" }}>cumpararea biletului</Link>.
             Consulta si{" "}
-            <Link href="/mersul-trenurilor" style={{ color: "var(--color-info)" }}>ghidul mersul trenurilor</Link>
-            {" "}sau pagina de{" "}
-            <Link href="/intarzieri-trenuri" style={{ color: "var(--color-info)" }}>intarzieri</Link>.
-          </p>
-        </div>
-      </Container>
-    </>
-  );
-}
+            <Link href="/mersul-trenurilor" style={{ color: "var(--color-info)" }}>ghi

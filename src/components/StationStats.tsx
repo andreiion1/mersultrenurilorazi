@@ -19,12 +19,12 @@ export function StationStats({ name, stats }: { name: string; stats: Stats }) {
 
   const peak = stats.peakHour !== null
     ? `${String(stats.peakHour).padStart(2, "0")}:00–${String((stats.peakHour + 1) % 24).padStart(2, "0")}:00`
-    : "—";
-  const opsText = stats.operators.length ? stats.operators.join(", ") : "—";
+    : "-";
+  const opsText = stats.operators.length ? stats.operators.join(", ") : "-";
 
   return (
     <section className="mt-8">
-      <h2 className="mb-3 text-xl font-bold text-strong">Statistici gară — {name}</h2>
+      <h2 className="mb-3 text-xl font-bold text-strong">Statistici gară: {name}</h2>
 
       <p className="mb-4 max-w-2xl text-sm text-body">
         Prin Gara {name} opresc până la <strong>{stats.maxTrainsPerDay}</strong> trenuri pe zi,
@@ -36,8 +36,8 @@ export function StationStats({ name, stats }: { name: string; stats: Stats }) {
         <Stat label="Trenuri pe zi (maxim)" value={String(stats.maxTrainsPerDay)} sub="cea mai aglomerată zi" />
         <Stat label="Destinații directe" value={String(stats.directDestinations)} sub="fără schimbare" />
         <Stat label="Trenuri care opresc aici" value={String(stats.servingTrains)} />
-        <Stat label="Primul tren" value={stats.firstTrain ?? "—"} />
-        <Stat label="Ultimul tren" value={stats.lastTrain ?? "—"} />
+        <Stat label="Primul tren" value={stats.firstTrain ?? "-"} />
+        <Stat label="Ultimul tren" value={stats.lastTrain ?? "-"} />
         <Stat label="Oră de vârf" value={peak} sub="cele mai multe treceri" />
       </div>
 

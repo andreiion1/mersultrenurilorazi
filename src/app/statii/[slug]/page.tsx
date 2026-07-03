@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const s = stationBySlug(slug);
   if (!s) return pageMeta({ title: "Gară indisponibilă", description: "", path: `/statii/${slug}`, noindex: true });
   return pageMeta({
-    title: `Gara ${s.name} — Plecări, Sosiri şi Orar Trenuri Azi`,
+    title: `Gara ${s.name}: Plecări, Sosiri şi Orar Trenuri Azi`,
     description: `Orar gara ${s.name}: plecări şi sosiri azi, peroane şi trenuri spre toate destinațiile. Informații actualizate.`,
     path: `/statii/${s.slug}`,
   });
@@ -56,7 +56,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Gări", href: "/statii" }, { name: s.name }]} />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-strong md:text-3xl">Gara {s.name} — plecări, sosiri şi orar trenuri</h1>
+          <h1 className="text-2xl font-bold text-strong md:text-3xl">Gara {s.name}: plecări, sosiri şi orar trenuri</h1>
           <p className="mt-1 text-muted">{s.city}, județul {s.county}</p>
         </div>
         <FavoriteButton item={{ kind: "station", slug: s.slug, label: `Gara ${s.name}`, sub: s.city, href: `/statii/${s.slug}` }} />
@@ -85,18 +85,4 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Destinații populare din {s.name}</h2>
           <div className="flex flex-wrap gap-2">
             {dests.map((d) => (
-              <Link key={d.slug} href={`/rute/${routeSlug(s.slug, d.slug)}`} className="rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">{d.name}</Link>
-            ))}
-          </div>
-        </>
-      )}
-
-      <StationMap name={s.name} city={s.city} county={s.county} mapQuery={s.mapQuery} />
-
-      <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
-      <Faq items={faq} />
-      <JsonLd data={faqSchema(faq)} />
-      <JsonLd data={stationSchema(s.name, s.city, s.lat, s.lng)} />
-    </Container>
-  );
-}
+    

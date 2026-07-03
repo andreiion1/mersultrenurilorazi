@@ -5,7 +5,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Despre Mersul Trenurilor la Zi",
-  description: "Despre proiectul Mersul Trenurilor la Zi — agregator de orar feroviar din România, rapid și clar.",
+  description: "Despre proiectul Mersul Trenurilor la Zi, agregator de orar feroviar din România, rapid și clar.",
   path: "/despre",
 });
 

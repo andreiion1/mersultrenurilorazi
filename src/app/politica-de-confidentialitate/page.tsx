@@ -28,7 +28,7 @@ export default function Page() {
 
         <h2 className="text-lg font-semibold text-strong">3. Cookie-uri</h2>
         <p>Versiunea actuală a site-ului nu folosește cookie-uri de tracking, publicitate sau analytics terțe. Folosim doar stocare strict necesară în browserul tău (localStorage): preferința de temă (întunecat/luminos), rutele și gările favorite, și opțiunea ta de consimțământ.</p>
-        <p>La prima vizită îți cerem acordul printr-un banner. Categoria „Necesare" este mereu activă (fără ea site-ul nu funcționează corect); categoria „Statistici" este opțională și implicit oprită — o activăm doar dacă o accepți. Îți poți schimba oricând alegerea din linkul <strong>„Setări cookie"</strong> aflat în subsolul site-ului.</p>
+        <p>La prima vizită îți cerem acordul printr-un banner. Categoria „Necesare" este mereu activă (fără ea site-ul nu funcționează corect); categoria „Statistici" este opțională și implicit oprită. O activăm doar dacă o accepți. Îți poți schimba oricând alegerea din linkul <strong>„Setări cookie"</strong> aflat în subsolul site-ului.</p>
 
         <h2 className="text-lg font-semibold text-strong">4. Baza legală</h2>
         <p>Prelucrarea datelor tehnice de acces se bazează pe interesul legitim al operatorului (art. 6 alin. 1 lit. f GDPR) de a asigura securitatea și funcționarea corectă a serviciului.</p>

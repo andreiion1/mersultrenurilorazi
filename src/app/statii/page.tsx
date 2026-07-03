@@ -7,7 +7,7 @@ import { pageMeta } from "@/lib/seo";
 import { PinIcon } from "@/components/Icons";
 
 export const metadata: Metadata = pageMeta({
-  title: "Gări din România — plecări, sosiri și orar",
+  title: "Gări din România: plecări, sosiri și orar",
   description: "Lista gărilor din România. Vezi plecările, sosirile și orarul trenurilor pentru fiecare gară.",
   path: "/statii",
 });

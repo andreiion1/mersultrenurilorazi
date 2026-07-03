@@ -11,7 +11,7 @@ import { websiteSchema, SITE } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "Mersul Trenurilor la Zi — Orar Trenuri CFR, Întârzieri și Bilete",
+    default: "Mersul Trenurilor la Zi: Orar Trenuri CFR, Întârzieri și Bilete",
     template: "%s | Mersul Trenurilor la Zi",
   },
   description: SITE.defaultDescription,
@@ -31,12 +31,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         <JsonLd data={websiteSchema()} />
         <Header />
-        <main className="min-h-[60vh] pb-20 lg:pb-0">{children}</main>
-        <Footer />
-        <BottomNav />
-        <CookieConsent />
-        <Analytics />
-      </body>
-    </html>
-  );
-}
+        <main className="min-h-[6

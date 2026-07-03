@@ -15,7 +15,7 @@ const dateLabel = () =>
   });
 
 export const metadata: Metadata = pageMeta({
-  title: "Trenuri Mâine — Orar CFR pentru Ziua Următoare",
+  title: "Trenuri Mâine: Orar CFR pentru Ziua Următoare",
   description: "Ce trenuri circulă mâine în România: orar pe rutele principale, durată și bilete. Planifică-ți călătoria din timp.",
   path: "/trenuri-maine",
 });
@@ -31,7 +31,7 @@ export default function Page() {
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Trenuri mâine" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Trenuri mâine — orar pentru ziua următoare</h1>
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Trenuri mâine: orar pentru ziua următoare</h1>
       <p className="mt-1 capitalize text-muted">{dateLabel()}</p>
       <p className="mt-2 max-w-2xl text-body">
         Trenuri reprezentative care circulă mâine pe rutele principale. Pentru orarul complet al unei rute,

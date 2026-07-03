@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Blog — ghiduri de călătorie cu trenul în România",
+  title: "Blog de călătorie cu trenul în România",
   description: "Ghiduri, sfaturi și rute de călătorie cu trenul în România.",
   path: "/blog",
 });
@@ -19,7 +19,7 @@ export default function Page() {
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Blog" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Blog — călătorii cu trenul în România</h1>
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Blog de călătorii cu trenul în România</h1>
       <p className="mt-2 max-w-2xl text-body">Secțiunea editorială este în pregătire. Vezi planul de conținut (500 idei, calendar 12 luni) în documentația proiectului.</p>
       <h2 className="mb-3 mt-6 text-lg font-bold text-strong">Categorii planificate</h2>
       <div className="flex flex-wrap gap-2">

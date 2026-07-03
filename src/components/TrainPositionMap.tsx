@@ -86,7 +86,7 @@ export function TrainPositionMap({ route, slug, category, number }: {
           if (cancelled) return;
           if (!pos) {
             if (markerRef.current) { map.removeLayer(markerRef.current); markerRef.current = null; }
-            setNote("Trenul nu circulă în acest moment — mai jos e traseul complet.");
+            setNote("Trenul nu circulă în acest moment. Mai jos e traseul complet.");
             map.fitBounds(latlngs, { padding: [36, 36] });
             return;
           }
@@ -128,7 +128,4 @@ export function TrainPositionMap({ route, slug, category, number }: {
         <style>{`.train-pos-arrow{background:transparent;border:none}`}</style>
         <div ref={elRef} className="h-[300px] w-full bg-subtle md:h-[360px]" />
       </div>
-      <p className="mt-2 text-xs text-muted">{note} Poziția e calculată din orar (nu în timp real). Pentru status oficial, vezi butonul „Status oficial pe Infofer".</p>
-    </div>
-  );
-}
+      <p className="mt-2 text-xs text-muted">{note} Poziția e calculată din orar (nu în timp real). Pentru status oficial, vezi butonul „Stat

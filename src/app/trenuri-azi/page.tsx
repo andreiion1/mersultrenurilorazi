@@ -15,7 +15,7 @@ const dateLabel = () =>
   });
 
 export const metadata: Metadata = pageMeta({
-  title: "Trenuri Azi — Orar și Întârzieri în România",
+  title: "Trenuri Azi: Orar și Întârzieri în România",
   description: "Vezi ce trenuri circulă azi în România: plecări, întârzieri și status pe rutele principale.",
   path: "/trenuri-azi",
 });
@@ -31,7 +31,7 @@ export default function Page() {
   return (
     <Container className="py-2">
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Trenuri azi" }]} />
-      <h1 className="text-2xl font-bold text-strong md:text-3xl">Trenuri azi — plecări și întârzieri în România</h1>
+      <h1 className="text-2xl font-bold text-strong md:text-3xl">Trenuri azi: plecări și întârzieri în România</h1>
       <p className="mt-1 capitalize text-muted">{dateLabel()}</p>
       <p className="mt-2 max-w-2xl text-body">
         Trenuri reprezentative care circulă azi pe rutele principale. Pentru orarul complet al unei rute, deschide pagina rutei.

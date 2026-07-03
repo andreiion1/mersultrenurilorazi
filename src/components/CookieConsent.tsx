@@ -44,11 +44,11 @@ export function CookieConsent() {
               <div className="mt-3 space-y-2">
                 <label className="flex items-center gap-2 text-xs" style={{ color: "rgba(255,255,255,0.75)" }}>
                   <input type="checkbox" checked disabled />
-                  <span><strong>Necesare</strong> — mereu active (temă, favorite). Fără ele site-ul nu funcționează corect.</span>
+                  <span><strong>Necesare</strong>: mereu active (temă, favorite). Fără ele site-ul nu funcționează corect.</span>
                 </label>
                 <label className="flex items-center gap-2 text-xs" style={{ color: "rgba(255,255,255,0.75)" }}>
                   <input type="checkbox" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} />
-                  <span><strong>Statistici</strong> — date anonime de utilizare, ca să îmbunătățim site-ul. Opțional.</span>
+                  <span><strong>Statistici</strong>: date anonime de utilizare, ca să îmbunătățim site-ul. Opțional.</span>
                 </label>
               </div>
             )}
