@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Board } from "@/components/Board";
 import { StationMap } from "@/components/StationMap";
 import { StationStats } from "@/components/StationStats";
+import { StationWeather } from "@/components/StationWeather";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
@@ -76,6 +77,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       </div>
 
       <StationStats name={s.name} stats={stationStats(s.slug)} />
+
+      {s.lat !== 0 && s.lng !== 0 && <StationWeather lat={s.lat} lng={s.lng} city={s.city} />}
 
       {dests.length > 0 && (
         <>

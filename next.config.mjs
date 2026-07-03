@@ -29,7 +29,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https://*.tile.openstreetmap.org https://*.google.com https://*.gstatic.com https://*.googleapis.com https://www.googletagmanager.com https://*.google-analytics.com",
-      `connect-src 'self'${isDev ? " ws: wss:" : ""} https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com`,
+      `connect-src 'self'${isDev ? " ws: wss:" : ""} https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://api.open-meteo.com`,
       "frame-src https://www.google.com https://maps.google.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
