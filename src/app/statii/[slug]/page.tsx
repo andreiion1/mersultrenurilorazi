@@ -12,6 +12,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { stations, stationBySlug, majorStations } from "@/data/stations";
 import { departures, arrivals, todayISO } from "@/lib/schedule";
 import { stationStats } from "@/lib/stationStats";
+import { routeSlug } from "@/lib/slug";
 import { pageMeta, faqSchema, stationSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -39,7 +40,11 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const dep = departures(s.slug, today);
   const arr = arrivals(s.slug, today);
 
-  const dests = Array.from(new Set(dep.map((d) => d.towardsName))).slice(0, 10);
+  // Destinații directe → link către paginile de rută existente (/rute/...), nu spre /cautare.
+  const dests = Array.from(new Set(dep.map((d) => d.towardsName)))
+    .map((name) => ({ name, slug: stations.find((x) => x.name === name)?.slug }))
+    .filter((d): d is { name: string; slug: string } => !!d.slug && d.slug !== s.slug)
+    .slice(0, 12);
   const faq = [
     { q: `De unde văd plecările din Gara ${s.name}?`, a: `Toate plecările de azi sunt în tabelul de mai sus, cu ora, destinația, peronul şi statusul trenului.` },
     { q: `Câte peroane are Gara ${s.name}?`, a: s.platformsCount ? `Gara ${s.name} are aproximativ ${s.platformsCount} peroane.` : `Informația despre peroane va fi adăugată în curând.` },
@@ -77,7 +82,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Destinații populare din {s.name}</h2>
           <div className="flex flex-wrap gap-2">
             {dests.map((d) => (
-              <Link key={d} href={`/cautare?from=${s.slug}&to=${stations.find((x) => x.name === d)?.slug ?? ""}&date=${today}`} className="rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">{d}</Link>
+              <Link key={d.slug} href={`/rute/${routeSlug(s.slug, d.slug)}`} className="rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">{d.name}</Link>
             ))}
           </div>
         </>
