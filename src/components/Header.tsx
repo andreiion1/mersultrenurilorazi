@@ -7,6 +7,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const NAV = [
   { href: "/cautare",            label: "Cauta ruta" },
+  { href: "/rute",               label: "Rute" },
   { href: "/trenuri-azi",        label: "Trenuri azi" },
   { href: "/statii",             label: "Gari" },
   { href: "/intarzieri-trenuri", label: "Intarzieri" },
