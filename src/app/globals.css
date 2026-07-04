@@ -206,11 +206,12 @@ body {
 }
 
 /* Previne zoom-ul automat pe iOS/Safari la focus în inputuri.
-   Safari face zoom dacă font-size < 16px și nu revine — forțăm 16px pe mobil. */
+   Safari face zoom dacă font-size < 16px și nu revine — forțăm 16px pe mobil.
+   !important e necesar ca să învingă clasele Tailwind (ex. text-sm = 14px). */
 @media (max-width: 640px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
-    font-size: 16px;
+    font-size: 16px !important;
   }
 }
