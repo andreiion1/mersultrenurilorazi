@@ -31,4 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         <JsonLd data={websiteSchema()} />
         <Header />
-        <main className="min-h-[6
+        <main className="min-h-[60vh] pb-20 lg:pb-0">{children}</main>
+        <Footer />
+        <BottomNav />
+        <CookieConsent />
+        <Analytics />
+      </body>
+    </html>
+  );
+}

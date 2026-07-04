@@ -86,4 +86,9 @@ export function Board({ rows, mode }: { rows: BoardRow[]; mode: "departures" | "
           </table>
           {/* textură LED subtilă (scanlines) */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,25
+            style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 3px)" }} />
+        </div>
+      )}
+    </div>
+  );
+}

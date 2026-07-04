@@ -85,4 +85,19 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Destinații populare din {s.name}</h2>
           <div className="flex flex-wrap gap-2">
             {dests.map((d) => (
+              <Link key={d.slug} href={`/rute/${routeSlug(s.slug, d.slug)}`} className="rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">{d.name}</Link>
+            ))}
+          </div>
+        </>
+      )}
+
+      <StationMap name={s.name} city={s.city} county={s.county} mapQuery={s.mapQuery} />
+
+      <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
+      <Faq items={faq} />
+      <JsonLd data={faqSchema(faq)} />
+      <JsonLd data={stationSchema(s.name, s.city, s.lat, s.lng)} />
+    </Container>
+  );
+}
     

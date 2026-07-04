@@ -156,4 +156,12 @@ export default function HomePage() {
             vizualizeaza plecarile si sosirile, urmareste un tren individual si ajunge rapid la{" "}
             <Link href="/cautare" style={{ color: "var(--color-info)" }}>cumpararea biletului</Link>.
             Consulta si{" "}
-            <Link href="/mersul-trenurilor" style={{ color: "var(--color-info)" }}>ghi
+            <Link href="/mersul-trenurilor" style={{ color: "var(--color-info)" }}>ghidul mersul trenurilor</Link>
+            {" "}sau pagina de{" "}
+            <Link href="/intarzieri-trenuri" style={{ color: "var(--color-info)" }}>intarzieri</Link>.
+          </p>
+        </div>
+      </Container>
+    </>
+  );
+}

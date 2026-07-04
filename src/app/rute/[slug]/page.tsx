@@ -146,4 +146,17 @@ export default async function Page({ params, searchParams }: Props) {
       </div>
 
       <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
-      <Faq items={faq} /
+      <Faq items={faq} />
+      <JsonLd data={faqSchema(faq)} />
+    </Container>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-line bg-card p-3">
+      <div className="text-xs text-muted">{label}</div>
+      <div className="mt-0.5 font-bold text-strong">{value}</div>
+    </div>
+  );
+}

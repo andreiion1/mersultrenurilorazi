@@ -130,4 +130,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         {" "}Vezi şi ruta <Link href={`/rute/${origin.slug}-${dest.slug}`} className="text-primary hover:underline">{origin.city}–{dest.city}</Link>.
       </div>
 
-      <h2 className="mb-3 mt-8 text-xl font-bold tex
+      <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Întrebări frecvente</h2>
+      <Faq items={faq} />
+      <JsonLd data={faqSchema(faq)} />
+    </Container>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-line bg-card p-3">
+      <div className="text-xs text-muted">{label}</div>
+      <div className="mt-0.5 font-bold capitalize text-strong">{value}</div>
+    </div>
+  );
+}
