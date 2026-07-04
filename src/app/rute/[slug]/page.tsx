@@ -23,15 +23,19 @@ export function generateStaticParams() {
   return getAllDirectRoutes().map((r) => ({ slug: r.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ data?: string; sort?: string; directe?: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const sp = await searchParams;
+  // Variațiile de filtrare/sortare (?data=, ?sort=, ?directe=) sunt duplicate → noindex.
+  // Canonical rămâne pe URL-ul curat, deci semnalul se consolidează acolo.
+  const hasFilter = !!(sp.data || sp.sort || sp.directe);
   const r = getRouteBySlug(slug);
   if (!r) return pageMeta({ title: "Rută indisponibilă", description: "", path: `/rute/${slug}`, noindex: true });
   return pageMeta({
     title: `Tren ${r.fromCity} ${r.toCity}: Orar, Preț Bilet și Durată ${YEAR}`,
     description: `Toate trenurile ${r.fromCity}–${r.toCity} azi și mâine. ${r.dailyTrainsCount} trenuri/zi, durată de la ${formatDuration(r.minDurationMin)}, ${r.distanceKm} km. Directe și cu schimbări. Cumpără bilet.`,
     path: `/rute/${r.slug}`,
-    noindex: !r.hasDirect,
+    noindex: !r.hasDirect || hasFilter,
   });
 }
 

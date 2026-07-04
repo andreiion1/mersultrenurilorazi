@@ -20,14 +20,18 @@ export function generateStaticParams() {
   return majorStations().map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ tab?: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const sp = await searchParams;
+  // Varianta ?tab=sosiri e duplicat al paginii de gară → noindex; canonical rămâne curat.
+  const hasFilter = !!sp.tab;
   const s = stationBySlug(slug);
   if (!s) return pageMeta({ title: "Gară indisponibilă", description: "", path: `/statii/${slug}`, noindex: true });
   return pageMeta({
     title: `Gara ${s.name}: Plecări, Sosiri şi Orar Trenuri Azi`,
     description: `Orar gara ${s.name}: plecări şi sosiri azi, peroane şi trenuri spre toate destinațiile. Informații actualizate.`,
     path: `/statii/${s.slug}`,
+    noindex: hasFilter,
   });
 }
 
