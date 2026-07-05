@@ -67,9 +67,21 @@ export function MapLive({ stations, focus }: { stations: GeoStation[]; focus?: F
       const L = window.L;
       const map = L.map(mapEl.current, { scrollWheelZoom: true }).setView([45.85, 25.0], 6);
       mapRef.current = map;
+      // Pane dedicat rețelei feroviare, sub gări/trenuri.
+      map.createPane("rail");
+      map.getPane("rail").style.zIndex = "250";
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap", maxZoom: 18,
+        attribution: "&copy; OpenStreetMap · linii: OpenRailwayMap/OSM", maxZoom: 18,
       }).addTo(map);
+
+      // Rețeaua feroviară reală (OSM, simplificată) — o singură polilinie multi-segment (performant).
+      fetch("/rail-lines.json", { cache: "force-cache" })
+        .then((r) => r.json())
+        .then((lines) => {
+          if (cancelled || !mapRef.current) return;
+          L.polyline(lines, { pane: "rail", color: "#F5A000", weight: 1.4, opacity: 0.35, interactive: false }).addTo(map);
+        })
+        .catch(() => { /* harta merge și fără liniile feroviare */ });
 
       // gări (markere mici)
       stations.forEach((s) => {
