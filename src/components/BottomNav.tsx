@@ -34,7 +34,7 @@ export function BottomNav() {
             key={href}
             href={href}
             className="flex flex-col items-center justify-center gap-0.5 py-2.5 text-xs font-medium transition-colors"
-            style={{ color: active ? "var(--color-primary)" : "rgba(255,255,255,0.40)" }}
+            style={{ color: active ? "var(--color-primary)" : "rgba(255,255,255,0.66)" }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="1.8"

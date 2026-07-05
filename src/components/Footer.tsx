@@ -26,7 +26,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
       <Link
         href={href}
         className="text-xs transition-colors"
-        style={{ color: "rgba(255,255,255,0.45)" }}
+        style={{ color: "rgba(255,255,255,0.70)" }}
       >
         {children}
       </Link>
@@ -38,7 +38,7 @@ function ColTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3
       className="mb-4 text-xs font-semibold uppercase tracking-widest"
-      style={{ color: "rgba(255,255,255,0.30)" }}
+      style={{ color: "rgba(255,255,255,0.68)" }}
     >
       {children}
     </h3>
@@ -107,11 +107,11 @@ export function Footer() {
               <rect x="4" y="3" width="16" height="13" rx="2" />
               <path d="M4 10h16M9 19l-2 2M15 19l2 2M9 19h6" />
             </svg>
-            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.70)" }}>
               Mersul Trenurilor <span style={{ color: "var(--color-primary)" }}>la Zi</span>
             </span>
           </div>
-          <div className="flex flex-col gap-1 text-xs sm:items-end" style={{ color: "rgba(255,255,255,0.22)" }}>
+          <div className="flex flex-col gap-1 text-xs sm:items-end" style={{ color: "rgba(255,255,255,0.68)" }}>
             <p>
               &copy; {new Date().getFullYear()} Mersul Trenurilor la Zi &middot; Informatii orientative &middot; Verificati sursa oficiala inainte de calatorie.
             </p>

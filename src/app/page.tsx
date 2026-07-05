@@ -30,7 +30,7 @@ export default function HomePage() {
         <Container className="py-10 md:py-16">
           <p
             className="mb-3 text-center text-xs font-semibold tracking-widest uppercase"
-            style={{ color: "rgba(255,255,255,0.30)" }}
+            style={{ color: "rgba(255,255,255,0.72)" }}
           >
             Romania &middot; Trenuri de calatori &middot; Date actualizate zilnic
           </p>
@@ -45,7 +45,7 @@ export default function HomePage() {
 
           <p
             className="mx-auto mb-8 max-w-xl text-center text-sm leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.50)" }}
+            style={{ color: "rgba(255,255,255,0.72)" }}
           >
             Cauta orice tren din Romania. Orar, intarzieri si bilete,
             mai simplu decat site-urile oficiale.

@@ -37,7 +37,7 @@ const config: Config = {
         amber: "0 4px 16px rgba(245,160,0,.25)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
       maxWidth: { container: "1200px" },
     },

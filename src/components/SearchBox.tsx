@@ -46,8 +46,8 @@ function StationField({ label, value, onPick, placeholder, dark }: {
   const bf = dark ? "0.5px solid rgba(245,160,0,0.55)" : "1.5px solid var(--color-primary)";
   const bn = dark ? "0.5px solid rgba(255,255,255,0.14)" : "1px solid var(--border)";
   const bg = dark ? "rgba(255,255,255,0.08)" : "var(--bg-base)";
-  const tc = dark ? (q ? "#ffffff" : "rgba(255,255,255,0.35)") : "var(--text-strong)";
-  const lc = dark ? "rgba(255,255,255,0.40)" : "var(--text-muted)";
+  const tc = dark ? (q ? "#ffffff" : "rgba(255,255,255,0.55)") : "var(--text-strong)";
+  const lc = dark ? "rgba(255,255,255,0.72)" : "var(--text-muted)";
   const db = dark ? "#0D1E3D" : "var(--bg-base)";
   const dbb = dark ? "0.5px solid rgba(255,255,255,0.12)" : "1px solid var(--border)";
 
@@ -62,6 +62,7 @@ function StationField({ label, value, onPick, placeholder, dark }: {
           className="h-full w-full bg-transparent text-sm font-medium outline-none"
           style={{ color: tc }}
           placeholder={placeholder}
+          aria-label={label}
           value={q}
           autoComplete="off"
           onChange={(e) => { setQ(e.target.value); onPick(null); setOpen(true); }}
@@ -98,7 +99,7 @@ function StationField({ label, value, onPick, placeholder, dark }: {
                 <span className="font-semibold" style={{ color: dark ? "#ffffff" : "var(--text-strong)" }}>
                   {o.name}
                 </span>
-                <span className="text-xs" style={{ color: dark ? "rgba(255,255,255,0.35)" : "var(--text-muted)" }}>
+                <span className="text-xs" style={{ color: dark ? "rgba(255,255,255,0.62)" : "var(--text-muted)" }}>
                   &middot; {o.city}
                 </span>
               </button>
@@ -169,8 +170,9 @@ export function SearchBox({ initialFrom, initialTo, initialDate, dark = false }:
         <StationField label="Unde" value={to} onPick={setTo} placeholder="Ex: Brasov" dark={dark} />
         <div className="flex flex-col gap-1">
           <label className="block text-xs font-semibold uppercase tracking-widest"
-            style={{ color: dark ? "rgba(255,255,255,0.40)" : "var(--text-muted)" }}>Data</label>
+            style={{ color: dark ? "rgba(255,255,255,0.72)" : "var(--text-muted)" }}>Data</label>
           <input type="date" value={date} min={today} onChange={(e) => setDate(e.target.value)}
+            aria-label="Data călătoriei"
             className="h-12 rounded-xl px-3 text-sm font-medium outline-none"
             style={dark
               ? { backgroundColor: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.14)", color: "#ffffff", colorScheme: "dark" }

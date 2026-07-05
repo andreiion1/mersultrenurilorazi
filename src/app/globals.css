@@ -215,3 +215,10 @@ body {
     font-size: 16px !important;
   }
 }
+
+/* Accesibilitate: linkurile din text (paragrafe) trebuie distinse și altfel decât
+   prin culoare — le subliniem mereu (audit Lighthouse „use of color"). */
+p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
