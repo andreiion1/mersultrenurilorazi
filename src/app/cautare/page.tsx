@@ -81,16 +81,16 @@ export default async function SearchPage({ searchParams }: Props) {
               <div className="space-y-3">
                 {isDefaultView ? (
                   <>
-                    {result.direct.map((r, i) => <TrainResultCard key={`d${i}`} r={r} />)}
+                    {result.direct.map((r, i) => <TrainResultCard key={`d${i}`} r={r} date={date} />)}
                     {result.connections.length > 0 && (
                       <>
                         <h2 className="pt-4 text-sm font-bold uppercase text-muted">Cu schimbare</h2>
-                        {result.connections.map((r, i) => <TrainResultCard key={`c${i}`} r={r} />)}
+                        {result.connections.map((r, i) => <TrainResultCard key={`c${i}`} r={r} date={date} />)}
                       </>
                     )}
                   </>
                 ) : list.length > 0 ? (
-                  list.map((r, i) => <TrainResultCard key={i} r={r} />)
+                  list.map((r, i) => <TrainResultCard key={i} r={r} date={date} />)
                 ) : (
                   <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
                     Nu există trenuri directe la această dată. Dezactivează filtrul ca să vezi variantele cu schimbare.

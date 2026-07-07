@@ -4,6 +4,7 @@ import { formatDuration } from "@/lib/timeUtils";
 import { operatorBySlug } from "@/data/operators";
 import { InfoBadge, CategoryTag } from "./Badges";
 import { StatusBadge, statusBarClass } from "./StatusBadge";
+import { DepartsIn } from "./DepartsIn";
 
 function addMinutes(time: string, min: number): string {
   const [h, m] = time.split(":").map(Number);
@@ -31,7 +32,7 @@ function TimeDisplay({ time, delayedTime }: { time: string; delayedTime?: string
   );
 }
 
-export function TrainResultCard({ r }: { r: SearchResult }) {
+export function TrainResultCard({ r, date }: { r: SearchResult; date?: string }) {
   const op = operatorBySlug(r.operatorSlug);
   const first = r.legs[0];
   const last = r.legs[r.legs.length - 1];
@@ -70,7 +71,8 @@ export function TrainResultCard({ r }: { r: SearchResult }) {
             </div>
             <TimeDisplay time={r.arrTime} delayedTime={delayedArr} />
           </div>
-          <div className="flex flex-wrap justify-end gap-1 shrink-0">
+          <div className="flex flex-wrap items-center justify-end gap-1 shrink-0">
+            {date && !isCancelled && <DepartsIn depTime={r.depTime} date={date} />}
             {r.badges.map((b) => <InfoBadge key={b} badge={b} />)}
             <StatusBadge status={r.status} />
           </div>

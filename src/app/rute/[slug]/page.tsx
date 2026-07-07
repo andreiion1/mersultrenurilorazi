@@ -123,16 +123,16 @@ export default async function Page({ params, searchParams }: Props) {
       <div className="mt-4 space-y-3">
         {isDefaultView ? (
           <>
-            {result.direct.map((x, i) => <TrainResultCard key={`d${i}`} r={x} />)}
+            {result.direct.map((x, i) => <TrainResultCard key={`d${i}`} r={x} date={date} />)}
             {result.connections.length > 0 && (
               <>
                 <h3 className="pt-2 text-sm font-bold uppercase text-muted">Cu schimbare</h3>
-                {result.connections.map((x, i) => <TrainResultCard key={`c${i}`} r={x} />)}
+                {result.connections.map((x, i) => <TrainResultCard key={`c${i}`} r={x} date={date} />)}
               </>
             )}
           </>
         ) : (
-          list.map((x, i) => <TrainResultCard key={i} r={x} />)
+          list.map((x, i) => <TrainResultCard key={i} r={x} date={date} />)
         )}
         {list.length === 0 && (
           <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
