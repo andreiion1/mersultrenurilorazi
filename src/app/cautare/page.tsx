@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/Container";
 import { SearchBox } from "@/components/SearchBox";
 import { TrainResultCard } from "@/components/TrainResultCard";
+import { TodayResults } from "@/components/TodayResults";
 import { ResultsControls } from "@/components/ResultsControls";
 import { stationBySlug } from "@/data/stations";
 import { search, todayISO, formatDuration } from "@/lib/schedule";
@@ -23,7 +24,8 @@ export default async function SearchPage({ searchParams }: Props) {
   const params = await searchParams;
   const fromSlug = params.from ?? "";
   const toSlug = params.to ?? "";
-  const date = parseDateParam(params.date, todayISO());
+  const today = todayISO();
+  const date = parseDateParam(params.date, today);
   const sort = parseSort(params.sort);
   const directOnly = parseDirectOnly(params.directe);
   const operator = parseOperator(params.op);
@@ -80,17 +82,12 @@ export default async function SearchPage({ searchParams }: Props) {
               </div>
               <div className="space-y-3">
                 {isDefaultView ? (
-                  <>
-                    {result.direct.map((r, i) => <TrainResultCard key={`d${i}`} r={r} date={date} />)}
-                    {result.connections.length > 0 && (
-                      <>
-                        <h2 className="pt-4 text-sm font-bold uppercase text-muted">Cu schimbare</h2>
-                        {result.connections.map((r, i) => <TrainResultCard key={`c${i}`} r={r} date={date} />)}
-                      </>
-                    )}
-                  </>
+                  <TodayResults date={date} today={today}
+                    direct={result.direct.map((x) => ({ depTime: x.depTime, node: <TrainResultCard r={x} date={date} /> }))}
+                    connections={result.connections.map((x) => ({ depTime: x.depTime, node: <TrainResultCard r={x} date={date} /> }))} />
                 ) : list.length > 0 ? (
-                  list.map((r, i) => <TrainResultCard key={i} r={r} date={date} />)
+                  <TodayResults date={date} today={today}
+                    direct={list.map((x) => ({ depTime: x.depTime, node: <TrainResultCard r={x} date={date} /> }))} />
                 ) : (
                   <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
                     Nu există trenuri directe la această dată. Dezactivează filtrul ca să vezi variantele cu schimbare.
