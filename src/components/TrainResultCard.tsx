@@ -98,12 +98,21 @@ export function TrainResultCard({ r }: { r: SearchResult }) {
 
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="flex items-baseline gap-1">
-              <span className="font-time text-xl font-bold tnum" style={{ color: isCancelled ? "var(--text-muted)" : "var(--text-strong)" }}>
-                {r.priceFrom.amount.toFixed(1)} lei
-              </span>
-            </div>
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>de la &middot; cls. 2 &middot; estimativ</span>
+            {r.priceFrom.amount != null ? (
+              <>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-time text-xl font-bold tnum" style={{ color: isCancelled ? "var(--text-muted)" : "var(--text-strong)" }}>
+                    {r.priceFrom.amount.toFixed(1)} lei
+                  </span>
+                </div>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>de la &middot; cls. 2 &middot; estimativ</span>
+              </>
+            ) : (
+              <>
+                <div className="text-base font-bold" style={{ color: "var(--text-strong)" }}>Preț la operator</div>
+                <span className="text-xs" style={{ color: "var(--text-muted)" }}>{op?.name ?? "operator privat"}</span>
+              </>
+            )}
           </div>
           {isCancelled ? (
             <span className="rounded-xl px-4 py-2.5 text-xs font-semibold" style={{ backgroundColor: "var(--color-danger-bg)", color: "var(--color-danger)" }}>

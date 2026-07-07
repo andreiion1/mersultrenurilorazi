@@ -54,6 +54,14 @@ export function estimatePrice(km: number, category: Train["category"]): number {
   return tariffPrice(km, category);
 }
 
+// Prețul se estimează DOAR pentru CFR Călători (grila lor oficială). Pentru operatorii
+// privați NU inventăm preț (tarife diferite) → afișăm „preț la operator" + deep-link.
+type PriceFrom = { amount: number | null; currency: "RON"; estimated: boolean };
+export function priceFor(operatorSlug: string, km: number, category: Train["category"]): PriceFrom {
+  if (operatorSlug === "cfr-calatori") return { amount: estimatePrice(km, category), currency: "RON", estimated: true };
+  return { amount: null, currency: "RON", estimated: false };
+}
+
 // ---------- Status tren ----------
 // IMPLICIT (onest): afișăm doar orarul programat, FĂRĂ a inventa întârzieri.
 // Statusul real vine din IRIS (vezi src/lib/iris.ts) — async, doar unde e nevoie.
@@ -134,7 +142,7 @@ export function searchDirect(fromSlug: string, toSlug: string, dateISO: string):
       distanceKm: km,
       operatorSlug: t.operatorSlug,
       badges: ["direct"],
-      priceFrom: { amount: estimatePrice(km, t.category), currency: "RON", estimated: true },
+      priceFrom: priceFor(t.operatorSlug, km, t.category),
       ticketUrl: ticketUrl(t.operatorSlug, leg.fromName, leg.toName, dateISO),
       status: mockStatus(t.slug, dateISO),
     });
@@ -211,7 +219,9 @@ export function searchConnections(fromSlug: string, toSlug: string, dateISO: str
           distanceKm: km,
           operatorSlug: a.train.operatorSlug,
           badges: [],
-          priceFrom: { amount: estimatePrice(km, "IR"), currency: "RON", estimated: true },
+          priceFrom: (a.train.operatorSlug === "cfr-calatori" && b.train.operatorSlug === "cfr-calatori")
+            ? { amount: estimatePrice(km, "IR"), currency: "RON" as const, estimated: true }
+            : { amount: null, currency: "RON" as const, estimated: false },
           ticketUrl: ticketUrl(a.train.operatorSlug, a.fromName, b.toName, dateISO),
           status: mockStatus(a.train.slug, dateISO),
         });
@@ -239,9 +249,12 @@ export function search(fromSlug: string, toSlug: string, dateISO: string) {
     // fastest
     const fastest = all.reduce((m, r) => (r.totalDurationMin < m.totalDurationMin ? r : m));
     if (!fastest.badges.includes("fastest")) fastest.badges.push("fastest");
-    // cheapest
-    const cheapest = all.reduce((m, r) => (r.priceFrom.amount < m.priceFrom.amount ? r : m));
-    if (!cheapest.badges.includes("cheapest")) cheapest.badges.push("cheapest");
+    // cheapest — doar între rezultatele cu preț (CFR); privații n-au preț estimat.
+    const priced = all.filter((r) => r.priceFrom.amount != null);
+    if (priced.length) {
+      const cheapest = priced.reduce((m, r) => (r.priceFrom.amount! < m.priceFrom.amount! ? r : m));
+      if (!cheapest.badges.includes("cheapest")) cheapest.badges.push("cheapest");
+    }
   }
   return { direct, connections, all };
 }

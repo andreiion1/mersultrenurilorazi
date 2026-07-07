@@ -39,7 +39,10 @@ export async function GET(req: Request) {
     directCount: result.direct.length,
     connectionCount: result.connections.length,
     fastestMin: result.all.length ? Math.min(...result.all.map((r) => r.totalDurationMin)) : null,
-    cheapestPrice: result.all.length ? Math.min(...result.all.map((r) => r.priceFrom.amount)) : null,
+    cheapestPrice: (() => {
+      const p = result.all.map((r) => r.priceFrom.amount).filter((x): x is number => x != null);
+      return p.length ? Math.min(...p) : null;
+    })(),
   };
 
   return NextResponse.json(

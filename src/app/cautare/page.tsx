@@ -6,7 +6,8 @@ import { TrainResultCard } from "@/components/TrainResultCard";
 import { ResultsControls } from "@/components/ResultsControls";
 import { stationBySlug } from "@/data/stations";
 import { search, todayISO, formatDuration } from "@/lib/schedule";
-import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
+import { applyView, parseSort, parseDirectOnly, parseDateParam, parseOperator } from "@/lib/resultsView";
+import { operatorBySlug } from "@/data/operators";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
@@ -16,7 +17,7 @@ export const metadata: Metadata = pageMeta({
   noindex: true,
 });
 
-interface Props { searchParams: Promise<{ from?: string; to?: string; date?: string; sort?: string; directe?: string }>; }
+interface Props { searchParams: Promise<{ from?: string; to?: string; date?: string; sort?: string; directe?: string; op?: string }>; }
 
 export default async function SearchPage({ searchParams }: Props) {
   const params = await searchParams;
@@ -25,15 +26,20 @@ export default async function SearchPage({ searchParams }: Props) {
   const date = parseDateParam(params.date, todayISO());
   const sort = parseSort(params.sort);
   const directOnly = parseDirectOnly(params.directe);
+  const operator = parseOperator(params.op);
   const from = stationBySlug(fromSlug);
   const to = stationBySlug(toSlug);
 
   const hasQuery = !!from && !!to;
   const result = hasQuery ? search(fromSlug, toSlug, date) : { direct: [], connections: [], all: [] };
-  const list = applyView(result.all, sort, directOnly);
+  const operatorsPresent = Array.from(new Set(result.all.flatMap((x) => x.legs.map((l) => l.train.operatorSlug))))
+    .map((s) => ({ slug: s, name: operatorBySlug(s)?.shortName ?? s }))
+    .sort((a, b) => a.name.localeCompare(b.name, "ro"));
+  const list = applyView(result.all, sort, directOnly, operator);
   const fastest = result.all.length ? Math.min(...result.all.map((r) => r.totalDurationMin)) : 0;
-  const cheapest = result.all.length ? Math.min(...result.all.map((r) => r.priceFrom.amount)) : 0;
-  const isDefaultView = sort === "plecare" && !directOnly;
+  const prices = result.all.map((r) => r.priceFrom.amount).filter((x): x is number => x != null);
+  const cheapest = prices.length ? Math.min(...prices) : 0;
+  const isDefaultView = sort === "plecare" && !directOnly && !operator;
 
   const dateLabel = new Date(date + "T00:00:00").toLocaleDateString("ro-RO", { weekday: "long", day: "numeric", month: "long" });
 
@@ -69,7 +75,7 @@ export default async function SearchPage({ searchParams }: Props) {
               <div className="mb-4">
                 <ResultsControls basePath="/cautare"
                   baseParams={{ from: fromSlug, to: toSlug, date }}
-                  sort={sort} directOnly={directOnly}
+                  sort={sort} directOnly={directOnly} operator={operator} operators={operatorsPresent}
                   directCount={result.direct.length} totalCount={result.all.length} />
               </div>
               <div className="space-y-3">

@@ -7,3 +7,6 @@
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# XML-uri sursă orar (data.gov.ro) — folosim doar generated.json la runtime.
+/data-sources/*.xml

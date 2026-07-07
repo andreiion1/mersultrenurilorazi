@@ -3,6 +3,7 @@ import { SITE } from "@/lib/seo";
 import { getAllDirectRoutes } from "@/data/routes";
 import { stations } from "@/data/stations";
 import { trains } from "@/data/trains";
+import { operatorsWithTrains } from "@/lib/operatorData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -10,8 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPages = [
     "", "/mersul-trenurilor", "/trenuri-azi", "/trenuri-maine", "/rute", "/statii",
-    "/intarzieri-trenuri", "/harta-trenuri-live", "/blog", "/despre", "/surse-de-date",
+    "/intarzieri-trenuri", "/harta-trenuri-live", "/operatori", "/blog", "/despre", "/surse-de-date",
   ].map((p) => ({ url: `${base}${p}`, lastModified: now, changeFrequency: "daily" as const, priority: p === "" ? 1 : 0.8 }));
+
+  const operatorPages = operatorsWithTrains().map((o) => ({
+    url: `${base}/operatori/${o.slug}`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.7,
+  }));
 
   const routePages = getAllDirectRoutes().map((r) => ({
     url: `${base}/rute/${r.slug}`,
@@ -32,5 +37,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${base}/tren/${t.slug}`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.5,
   }));
 
-  return [...staticPages, ...routePages, ...stationPages, ...trainPages];
+  return [...staticPages, ...operatorPages, ...routePages, ...stationPages, ...trainPages];
 }

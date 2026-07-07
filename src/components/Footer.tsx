@@ -10,6 +10,7 @@ const RESURSE = [
   { href: "/trenuri-maine",     label: "Trenuri maine" },
   { href: "/intarzieri-trenuri", label: "Intarzieri" },
   { href: "/harta-trenuri-live", label: "Harta trenuri" },
+  { href: "/operatori",         label: "Operatori" },
   { href: "/blog",              label: "Blog" },
 ];
 

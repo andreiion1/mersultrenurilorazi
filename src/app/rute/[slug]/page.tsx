@@ -13,7 +13,8 @@ import { RouteAnimatedMap } from "@/components/RouteAnimatedMap";
 import { routeWaypoints } from "@/lib/routePath";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
 import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
-import { applyView, parseSort, parseDirectOnly, parseDateParam } from "@/lib/resultsView";
+import { applyView, parseSort, parseDirectOnly, parseDateParam, parseOperator } from "@/lib/resultsView";
+import { operatorBySlug } from "@/data/operators";
 import { pageMeta, faqSchema } from "@/lib/seo";
 
 const YEAR = new Date().getFullYear();
@@ -23,12 +24,12 @@ export function generateStaticParams() {
   return getAllDirectRoutes().map((r) => ({ slug: r.slug }));
 }
 
-export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ data?: string; sort?: string; directe?: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ data?: string; sort?: string; directe?: string; op?: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const sp = await searchParams;
-  // Variațiile de filtrare/sortare (?data=, ?sort=, ?directe=) sunt duplicate → noindex.
+  // Variațiile de filtrare/sortare (?data=, ?sort=, ?directe=, ?op=) sunt duplicate → noindex.
   // Canonical rămâne pe URL-ul curat, deci semnalul se consolidează acolo.
-  const hasFilter = !!(sp.data || sp.sort || sp.directe);
+  const hasFilter = !!(sp.data || sp.sort || sp.directe || sp.op);
   const r = getRouteBySlug(slug);
   if (!r) return pageMeta({ title: "Rută indisponibilă", description: "", path: `/rute/${slug}`, noindex: true });
   return pageMeta({
@@ -41,7 +42,7 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ data?: string; sort?: string; directe?: string }>;
+  searchParams: Promise<{ data?: string; sort?: string; directe?: string; op?: string }>;
 }
 
 export default async function Page({ params, searchParams }: Props) {
@@ -58,9 +59,13 @@ export default async function Page({ params, searchParams }: Props) {
   const date = parseDateParam(sp.data, today);
   const sort = parseSort(sp.sort);
   const directOnly = parseDirectOnly(sp.directe);
+  const operator = parseOperator(sp.op);
 
   const result = search(r.fromSlug, r.toSlug, date);
-  const list = applyView(result.all, sort, directOnly);
+  const operatorsPresent = Array.from(new Set(result.all.flatMap((x) => x.legs.map((l) => l.train.operatorSlug))))
+    .map((s) => ({ slug: s, name: operatorBySlug(s)?.shortName ?? s }))
+    .sort((a, b) => a.name.localeCompare(b.name, "ro"));
+  const list = applyView(result.all, sort, directOnly, operator);
   const fastest = result.all.length ? Math.min(...result.all.map((x) => x.totalDurationMin)) : 0;
 
   const dateLabel =
@@ -69,7 +74,7 @@ export default async function Page({ params, searchParams }: Props) {
     new Date(date + "T00:00:00").toLocaleDateString("ro-RO", { weekday: "long", day: "numeric", month: "long" });
 
   const baseParams = { data: date === today ? undefined : date };
-  const isDefaultView = sort === "plecare" && !directOnly;
+  const isDefaultView = sort === "plecare" && !directOnly && !operator;
 
   const faq = [
     { q: `Cât durează trenul ${r.fromCity}–${r.toCity}?`, a: `Cel mai rapid tren parcurge ruta în aproximativ ${formatDuration(r.minDurationMin)}. Durata medie este de circa ${formatDuration(r.avgDurationMin)}.` },
@@ -107,10 +112,10 @@ export default async function Page({ params, searchParams }: Props) {
 
       <div className="mt-3 space-y-2.5">
         <DateNav basePath={`/rute/${r.slug}`} date={date} today={today} tomorrow={tomorrow}
-          extraParams={{ sort: sort === "plecare" ? undefined : sort, directe: directOnly ? "1" : undefined }} />
+          extraParams={{ sort: sort === "plecare" ? undefined : sort, directe: directOnly ? "1" : undefined, op: operator }} />
         {result.all.length > 0 && (
           <ResultsControls basePath={`/rute/${r.slug}`} baseParams={baseParams}
-            sort={sort} directOnly={directOnly}
+            sort={sort} directOnly={directOnly} operator={operator} operators={operatorsPresent}
             directCount={result.direct.length} totalCount={result.all.length} />
         )}
       </div>

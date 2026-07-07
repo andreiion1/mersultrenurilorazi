@@ -81,7 +81,7 @@ export interface SearchResult {
   distanceKm: number;
   operatorSlug: string;
   badges: ResultBadge[];
-  priceFrom: { amount: number; currency: "RON"; estimated: true };
+  priceFrom: { amount: number | null; currency: "RON"; estimated: boolean };
   ticketUrl: string;
   status: RunStatus;
 }
