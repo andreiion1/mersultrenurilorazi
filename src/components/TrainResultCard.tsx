@@ -92,7 +92,13 @@ export function TrainResultCard({ r }: { r: SearchResult }) {
               <span style={{ color: "var(--text-strong)", fontWeight: 500 }}>{last.train.number}</span>
             </span>
           )}
-          <span className="text-sm" style={{ color: "var(--text-muted)" }}>&middot; {op?.shortName ?? r.operatorSlug}</span>
+          {op ? (
+            <Link href={`/operatori/${op.slug}`} className="text-sm hover:underline" style={{ color: "var(--text-muted)" }}>
+              &middot; {op.shortName || op.name}
+            </Link>
+          ) : (
+            <span className="text-sm" style={{ color: "var(--text-muted)" }}>&middot; {r.operatorSlug}</span>
+          )}
           <span className="text-sm" style={{ color: "var(--text-muted)" }}>&middot; {r.distanceKm} km</span>
         </div>
 

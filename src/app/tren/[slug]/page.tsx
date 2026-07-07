@@ -90,7 +90,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </Link>
         </div>
       </div>
-      {t.name && <p className="mt-1 text-muted">„{t.name}” · {op?.name}</p>}
+      <p className="mt-1 text-muted">
+        {t.name && <>„{t.name}” · </>}
+        Operat de{" "}
+        {op ? (
+          <Link href={`/operatori/${op.slug}`} className="font-medium text-primary hover:underline">{op.name}</Link>
+        ) : (
+          <span>{t.operatorSlug}</span>
+        )}
+      </p>
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Rută" value={`${origin.city} → ${dest.city}`} />
