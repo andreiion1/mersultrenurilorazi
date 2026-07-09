@@ -38,6 +38,8 @@ const OPERATORS = {
   "236037":  { name: "Interregional Călători", slug: "interregional-calatori", short: "irc" },
   "228389":  { name: "Transferoviar Călători", slug: "transferoviar-calatori", short: "tfc" },
   "247232":  { name: "Ferotrafic", slug: "ferotrafic", short: "fero" },
+  "236025":  { name: "Softrans", slug: "softrans", short: "sof" },
+  "237330":  { name: "Astra Trans Carpatic", slug: "astra-trans-carpatic", short: "astra" },
 };
 const opOf = (code) => OPERATORS[String(code)] || { name: "Operator " + code, slug: "op-" + code, short: "op" + code };
 
