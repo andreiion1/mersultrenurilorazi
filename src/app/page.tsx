@@ -5,21 +5,38 @@ import { SearchBox } from "@/components/SearchBox";
 import { RouteCard } from "@/components/RouteCard";
 import { getPopularRoutes } from "@/data/routes";
 import { majorStations } from "@/data/stations";
-import { search, todayISO } from "@/lib/schedule";
-import { TrainResultCard } from "@/components/TrainResultCard";
+import { departures, todayISO } from "@/lib/schedule";
+import { DeparturesBoard, type BoardStation } from "@/components/DeparturesBoard";
 
 // Homepage: canonical pe propriul URL (rădăcina). Titlul rămâne cel implicit din layout.
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+// Reîmprospătare periodică pentru ca „azi” și plecările să rămână actuale.
+export const revalidate = 3600;
+
+// Gări-hub pentru panoul de plecări.
+const BOARD_HUBS = [
+  { slug: "bucuresti-nord-gr-a", name: "București Nord" },
+  { slug: "cluj-napoca", name: "Cluj-Napoca" },
+  { slug: "brasov", name: "Brașov" },
+  { slug: "timisoara-nord", name: "Timișoara Nord" },
+  { slug: "iasi", name: "Iași" },
+  { slug: "constanta", name: "Constanța" },
+];
+
 export default function HomePage() {
   const routes = getPopularRoutes();
   const stations = majorStations();
-  const topRoute = routes[0];
-  const sample = topRoute
-    ? search(topRoute.fromSlug, topRoute.toSlug, todayISO()).all.slice(0, 3)
-    : [];
+  const today = todayISO();
+  const boardStations: BoardStation[] = BOARD_HUBS.map((h) => ({
+    slug: h.slug,
+    name: h.name,
+    rows: departures(h.slug, today).slice(0, 250).map((r) => ({
+      t: r.time, d: r.towardsName, ds: r.towardsSlug, c: r.category, n: r.number, s: r.trainSlug, op: r.operatorSlug,
+    })),
+  })).filter((s) => s.rows.length > 0);
 
   return (
     <>
@@ -47,8 +64,8 @@ export default function HomePage() {
             className="mx-auto mb-8 max-w-xl text-center text-sm leading-relaxed"
             style={{ color: "rgba(255,255,255,0.72)" }}
           >
-            Cauta orice tren din Romania. Orar, intarzieri si bilete,
-            mai simplu decat site-urile oficiale.
+            Cauta orice tren din Romania. Orar, rute, intarzieri si bilete,
+            mai simplu ca niciodata.
           </p>
 
           <div className="mx-auto max-w-3xl">
@@ -122,21 +139,17 @@ export default function HomePage() {
         </div>
       </Container>
 
-      {sample.length > 0 && topRoute && (
+      {boardStations.length > 0 && (
         <Container className="pb-10">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4">
             <h2 className="text-lg font-bold" style={{ color: "var(--text-strong)" }}>
-              Trenuri azi: {topRoute.fromCity} &rarr; {topRoute.toCity}
+              Ce tren pleacă următorul?
             </h2>
-            <Link href={`/rute/${topRoute.slug}`} className="text-xs font-medium" style={{ color: "var(--color-info)" }}>
-              Toate trenurile &rarr;
-            </Link>
+            <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
+              Plecările care urmează din marile gări, cu timp până la plecare.
+            </p>
           </div>
-          <div className="space-y-3">
-            {sample.map((r, i) => (
-              <TrainResultCard key={i} r={r} />
-            ))}
-          </div>
+          <DeparturesBoard stations={boardStations} />
         </Container>
       )}
 
