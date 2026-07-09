@@ -14,9 +14,8 @@ const HEAD_COL = "#8ea6ff"; // culoare capete coloane
 const TXT = "#e8efff";
 const AMBER = "#ffce3a";
 
-// Fereastra implicită pe pagina de gară: de la 2h în urmă până la 4h în față.
-const PAST_MIN = 120;
-const AHEAD_MIN = 240;
+// Pe pagina de gară afișăm implicit doar următoarele plecări/sosiri (max 20).
+const MAX_UPCOMING = 20;
 const toMin = (t: string) => {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
@@ -66,31 +65,23 @@ export function Board({ rows, mode, windowed = false }: { rows: BoardRow[]; mode
   const dirLabel = mode === "departures" ? "PLEACĂ LA" : "SOSEȘTE DE LA";
   const kind = mode === "departures" ? "plecări" : "sosiri";
 
-  // Fereastra de timp: activă doar pe pagina de gară (windowed) și după montare.
-  let visible = rows;
+  // Pe pagina de gară: implicit doar următoarele plecări/sosiri de AZI (max 20).
+  // Cele deja trecute → „Vezi mai devreme"; restul → „Vezi mai târziu".
+  type Item = { r: BoardRow; departed: boolean };
+  let visible: Item[];
   let earlierCount = 0;
   let laterCount = 0;
   let windowActive = false;
   if (windowed && nowMin != null) {
-    const lo = nowMin - PAST_MIN;
-    const hi = nowMin + AHEAD_MIN;
-    const earlier = rows.filter((r) => toMin(r.time) < lo);
-    const later = rows.filter((r) => toMin(r.time) > hi);
-    const win = rows.filter((r) => {
-      const m = toMin(r.time);
-      return m >= lo && m <= hi;
-    });
-    if (win.length > 0) {
-      windowActive = true;
-      earlierCount = earlier.length;
-      laterCount = later.length;
-      visible = [
-        ...(showEarlier ? earlier : []),
-        ...win,
-        ...(showLater ? later : []),
-      ];
-    }
-    // dacă nu e nimic în fereastră (ex. noaptea târziu) → arătăm tot, fără colapsare.
+    windowActive = true;
+    const past: Item[] = rows.filter((r) => toMin(r.time) < nowMin).map((r) => ({ r, departed: true }));
+    const upcoming: Item[] = rows.filter((r) => toMin(r.time) >= nowMin).map((r) => ({ r, departed: false }));
+    earlierCount = past.length;
+    const shownUpcoming = showLater ? upcoming : upcoming.slice(0, MAX_UPCOMING);
+    laterCount = Math.max(0, upcoming.length - MAX_UPCOMING);
+    visible = [...(showEarlier ? past : []), ...shownUpcoming];
+  } else {
+    visible = rows.map((r) => ({ r, departed: false }));
   }
 
   return (
@@ -117,6 +108,11 @@ export function Board({ rows, mode, windowed = false }: { rows: BoardRow[]; mode
             />
           )}
 
+          {visible.length === 0 ? (
+            <p className="px-4 py-6 text-center" style={{ color: HEAD_COL, fontFamily: MONO }}>
+              Nu mai sunt {kind} azi din această gară. Vezi cursele de mai devreme sau orarul complet.
+            </p>
+          ) : (
           <div className="relative">
             <table className="w-full" style={{ fontFamily: MONO, borderCollapse: "collapse" }}>
               <thead className="hidden md:table-header-group">
@@ -129,12 +125,12 @@ export function Board({ rows, mode, windowed = false }: { rows: BoardRow[]; mode
                 </tr>
               </thead>
               <tbody>
-                {visible.map((r, i) => {
-                  const departed = windowActive && nowMin != null && toMin(r.time) < nowMin;
+                {visible.map((item, i) => {
+                  const r = item.r;
                   return (
-                    <tr key={`${r.trainSlug}-${r.time}-${i}`}
+                    <tr key={`${r.trainSlug}-${r.time}-${item.nextDay ? "m" : "a"}-${i}`}
                       className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-4 py-2.5 md:table-row md:py-0"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.07)", backgroundColor: i % 2 ? "rgba(255,255,255,0.03)" : "transparent", opacity: departed ? 0.5 : 1 }}>
+                      style={{ borderTop: "1px solid rgba(255,255,255,0.07)", backgroundColor: i % 2 ? "rgba(255,255,255,0.03)" : "transparent", opacity: item.departed ? 0.5 : 1 }}>
                       <td className="md:px-4 md:py-2.5">
                         <span className="text-lg font-bold md:text-base" style={{ color: AMBER, fontVariantNumeric: "tabular-nums" }}>{r.time}</span>
                       </td>
@@ -166,6 +162,7 @@ export function Board({ rows, mode, windowed = false }: { rows: BoardRow[]; mode
             <div aria-hidden="true" className="pointer-events-none absolute inset-0"
               style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 3px)" }} />
           </div>
+          )}
 
           {windowActive && laterCount > 0 && (
             <MoreBar
