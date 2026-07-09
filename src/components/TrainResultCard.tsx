@@ -88,10 +88,10 @@ export function TrainResultCard({ r, date }: { r: SearchResult; date?: string })
           ) : (
             <span className="flex flex-wrap items-center gap-1.5 text-sm">
               <CategoryTag category={first.train.category} />
-              <span style={{ color: "var(--text-strong)", fontWeight: 500 }}>{first.train.number}</span>
+              <Link href={`/tren/${first.train.slug}`} className="hover:underline" style={{ color: "var(--text-strong)", fontWeight: 500 }}>{first.train.number}</Link>
               <span style={{ color: "var(--text-muted)" }}>&rarr; schimb la {first.toName} &rarr;</span>
               <CategoryTag category={last.train.category} />
-              <span style={{ color: "var(--text-strong)", fontWeight: 500 }}>{last.train.number}</span>
+              <Link href={`/tren/${last.train.slug}`} className="hover:underline" style={{ color: "var(--text-strong)", fontWeight: 500 }}>{last.train.number}</Link>
             </span>
           )}
           {op ? (
@@ -157,7 +157,7 @@ export function TrainResultCard({ r, date }: { r: SearchResult; date?: string })
                 <span className="font-semibold" style={{ color: "var(--text-default)" }}>{l.arrTime}</span>
                 <span>{l.toName}</span>
                 <CategoryTag category={l.train.category} />
-                <span>{l.train.number}</span>
+                <Link href={`/tren/${l.train.slug}`} className="font-semibold hover:underline" style={{ color: "var(--text-default)" }}>{l.train.number}</Link>
               </li>
             ))}
           </ol>
