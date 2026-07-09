@@ -33,7 +33,7 @@ export default function HomePage() {
   const boardStations: BoardStation[] = BOARD_HUBS.map((h) => ({
     slug: h.slug,
     name: h.name,
-    rows: departures(h.slug, today).slice(0, 250).map((r) => ({
+    rows: departures(h.slug, today).map((r) => ({
       t: r.time, d: r.towardsName, ds: r.towardsSlug, c: r.category, n: r.number, s: r.trainSlug, op: r.operatorSlug,
     })),
   })).filter((s) => s.rows.length > 0);
