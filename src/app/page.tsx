@@ -5,7 +5,7 @@ import { SearchBox } from "@/components/SearchBox";
 import { RouteCard } from "@/components/RouteCard";
 import { getPopularRoutes } from "@/data/routes";
 import { majorStations } from "@/data/stations";
-import { departures, todayISO } from "@/lib/schedule";
+import { departures, arrivals, todayISO } from "@/lib/schedule";
 import { DeparturesBoard, type BoardStation } from "@/components/DeparturesBoard";
 
 // Homepage: canonical pe propriul URL (rădăcina). Titlul rămâne cel implicit din layout.
@@ -35,6 +35,13 @@ export default function HomePage() {
     name: h.name,
     rows: departures(h.slug, today).map((r) => ({
       t: r.time, d: r.towardsName, ds: r.towardsSlug, c: r.category, n: r.number, s: r.trainSlug, op: r.operatorSlug,
+    })),
+  })).filter((s) => s.rows.length > 0);
+  const arrivalStations: BoardStation[] = BOARD_HUBS.map((h) => ({
+    slug: h.slug,
+    name: h.name,
+    rows: arrivals(h.slug, today).map((r) => ({
+      t: r.time, d: r.fromName, ds: r.fromSlug, c: r.category, n: r.number, s: r.trainSlug, op: r.operatorSlug,
     })),
   })).filter((s) => s.rows.length > 0);
 
@@ -150,6 +157,20 @@ export default function HomePage() {
             </p>
           </div>
           <DeparturesBoard stations={boardStations} />
+        </Container>
+      )}
+
+      {arrivalStations.length > 0 && (
+        <Container className="pb-10">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold" style={{ color: "var(--text-strong)" }}>
+              Ce tren urmează să sosească?
+            </h2>
+            <p className="mt-1 text-sm" style={{ color: "var(--text-muted)" }}>
+              Sosirile care urmează în marile gări, cu timp până la sosire.
+            </p>
+          </div>
+          <DeparturesBoard stations={arrivalStations} mode="arrivals" />
         </Container>
       )}
 

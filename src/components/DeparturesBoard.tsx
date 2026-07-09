@@ -11,8 +11,9 @@ function toMin(t: string): number {
   return h * 60 + m;
 }
 
-// Panou de plecări din marile gări, cu plecările care urmează și countdown live.
-export function DeparturesBoard({ stations }: { stations: BoardStation[] }) {
+// Panou de plecări/sosiri din marile gări, cu cursele care urmează și countdown live.
+export function DeparturesBoard({ stations, mode = "departures" }: { stations: BoardStation[]; mode?: "departures" | "arrivals" }) {
+  const isArr = mode === "arrivals";
   const [active, setActive] = useState(0);
   const [nowMin, setNowMin] = useState<number | null>(null);
   const [clock, setClock] = useState("");
@@ -77,7 +78,7 @@ export function DeparturesBoard({ stations }: { stations: BoardStation[] }) {
               <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: "var(--color-primary)" }} />
             </span>
             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#fff" }}>
-              Plecări azi · {st.name}
+              {isArr ? "Sosiri azi" : "Plecări azi"} · {st.name}
             </span>
           </div>
           <span className="font-time text-sm font-bold tnum" style={{ color: "rgba(255,255,255,0.75)" }}>
@@ -88,7 +89,7 @@ export function DeparturesBoard({ stations }: { stations: BoardStation[] }) {
         <div>
           {upcoming.length === 0 ? (
             <div className="px-4 py-8 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
-              Nu mai sunt plecări azi din {st.name}.
+              Nu mai sunt {isArr ? "sosiri" : "plecări"} azi în {st.name}.
             </div>
           ) : (
             upcoming.map((r, i) => (
@@ -121,11 +122,11 @@ export function DeparturesBoard({ stations }: { stations: BoardStation[] }) {
         </div>
 
         <Link
-          href={`/plecari/${st.slug}`}
+          href={`/${isArr ? "sosiri" : "plecari"}/${st.slug}`}
           className="flex items-center justify-center gap-1 px-4 py-3 text-xs font-semibold transition-colors"
           style={{ borderTop: "0.5px solid rgba(255,255,255,0.14)", color: "var(--color-primary)" }}
         >
-          Toate plecările din {st.name}
+          {isArr ? "Toate sosirile în" : "Toate plecările din"} {st.name}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14m-7-7 7 7-7 7" />
           </svg>
