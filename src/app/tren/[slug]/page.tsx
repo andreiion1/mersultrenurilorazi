@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </p>
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat label="Rută" value={`${origin.city} → ${dest.city}`} />
+        <Stat label="Rută" value={`${origin.city} → ${dest.city}`} href={`/rute/${origin.slug}-${dest.slug}`} />
         <Stat label="Durată" value={formatDuration(total)} />
         <Stat label="Punctualitate" value={`~${hist.onTimePct}%`} />
         <Stat label="Risc întârziere" value={riskLabel} />
@@ -145,11 +145,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, href }: { label: string; value: string; href?: string }) {
   return (
     <div className="rounded-md border border-line bg-card p-3">
       <div className="text-xs text-muted">{label}</div>
-      <div className="mt-0.5 font-bold capitalize text-strong">{value}</div>
+      {href ? (
+        <Link href={href} className="mt-0.5 block font-bold capitalize text-primary hover:underline">{value}</Link>
+      ) : (
+        <div className="mt-0.5 font-bold capitalize text-strong">{value}</div>
+      )}
     </div>
   );
 }
