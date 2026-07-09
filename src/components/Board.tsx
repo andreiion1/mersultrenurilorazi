@@ -128,7 +128,7 @@ export function Board({ rows, mode, windowed = false }: { rows: BoardRow[]; mode
                 {visible.map((item, i) => {
                   const r = item.r;
                   return (
-                    <tr key={`${r.trainSlug}-${r.time}-${item.nextDay ? "m" : "a"}-${i}`}
+                    <tr key={`${r.trainSlug}-${r.time}-${i}`}
                       className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-4 py-2.5 md:table-row md:py-0"
                       style={{ borderTop: "1px solid rgba(255,255,255,0.07)", backgroundColor: i % 2 ? "rgba(255,255,255,0.03)" : "transparent", opacity: item.departed ? 0.5 : 1 }}>
                       <td className="md:px-4 md:py-2.5">
