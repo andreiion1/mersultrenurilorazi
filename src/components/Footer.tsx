@@ -93,6 +93,15 @@ export function Footer() {
               {COMPANIE.map(({ href, label }) => (
                 <FooterLink key={href} href={href}>{label}</FooterLink>
               ))}
+              <li>
+                <a
+                  href="mailto:contact@mersultrenurilorlazi.ro"
+                  className="text-xs transition-colors hover:text-primary"
+                  style={{ color: "rgba(255,255,255,0.70)" }}
+                >
+                  contact@mersultrenurilorlazi.ro
+                </a>
+              </li>
               <CookieSettingsButton />
             </ul>
           </div>

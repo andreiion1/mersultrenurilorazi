@@ -34,7 +34,7 @@ export default function Page() {
         <p>Prelucrarea datelor tehnice de acces se bazează pe interesul legitim al operatorului (art. 6 alin. 1 lit. f GDPR) de a asigura securitatea și funcționarea corectă a serviciului.</p>
 
         <h2 className="text-lg font-semibold text-strong">5. Drepturile tale</h2>
-        <p>Conform GDPR, ai dreptul de acces, rectificare, ștergere, restricționare, portabilitate și opoziție. Întrucât nu colectăm date personale identificabile, exercitarea acestor drepturi nu este aplicabilă în practică pentru serviciul nostru. Pentru orice nelămurire, ne poți contacta.</p>
+        <p>Conform GDPR, ai dreptul de acces, rectificare, ștergere, restricționare, portabilitate și opoziție. Întrucât nu colectăm date personale identificabile, exercitarea acestor drepturi nu este aplicabilă în practică pentru serviciul nostru. Pentru orice nelămurire, ne poți contacta la <a href="mailto:contact@mersultrenurilorlazi.ro" className="text-primary hover:underline">contact@mersultrenurilorlazi.ro</a>.</p>
 
         <h2 className="text-lg font-semibold text-strong">6. Modificări</h2>
         <p>Ne rezervăm dreptul de a actualiza această politică. Data ultimei modificări este indicată în antetul paginii.</p>
