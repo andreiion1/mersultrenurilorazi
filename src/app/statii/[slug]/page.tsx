@@ -10,9 +10,9 @@ import { StationWeather } from "@/components/StationWeather";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
-import { stations, stationBySlug, majorStations } from "@/data/stations";
+import { stationBySlug, majorStations } from "@/data/stations";
 import { departures, arrivals, todayISO } from "@/lib/schedule";
-import { stationStats } from "@/lib/stationStats";
+import { stationStats, directDestinationsRanked } from "@/lib/stationStats";
 import { routeSlug } from "@/lib/slug";
 import { pageMeta, faqSchema, stationSchema } from "@/lib/seo";
 
@@ -45,11 +45,9 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const dep = departures(s.slug, today);
   const arr = arrivals(s.slug, today);
 
-  // Destinații directe → link către paginile de rută existente (/rute/...), nu spre /cautare.
-  const dests = Array.from(new Set(dep.map((d) => d.towardsName)))
-    .map((name) => ({ name, slug: stations.find((x) => x.name === name)?.slug }))
-    .filter((d): d is { name: string; slug: string } => !!d.slug && d.slug !== s.slug)
-    .slice(0, 12);
+  // Toate destinațiile directe → link către paginile de rută (/rute/...).
+  // Ordonate după numărul de trenuri directe către fiecare, apoi gări mari, apoi alfabetic.
+  const dests = directDestinationsRanked(s.slug);
   const faq = [
     { q: `De unde văd plecările din Gara ${s.name}?`, a: `Toate plecările de azi sunt în tabelul de mai sus, cu ora, destinația, peronul şi statusul trenului.` },
     { q: `Câte peroane are Gara ${s.name}?`, a: s.platformsCount ? `Gara ${s.name} are aproximativ ${s.platformsCount} peroane.` : `Informația despre peroane va fi adăugată în curând.` },
@@ -86,10 +84,14 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
       {dests.length > 0 && (
         <>
-          <h2 className="mb-3 mt-8 text-xl font-bold text-strong">Destinații populare din {s.name}</h2>
+          <h2 className="mb-1 mt-8 text-xl font-bold text-strong">Destinații directe din {s.name}</h2>
+          <p className="mb-3 text-sm text-muted">Toate gările accesibile fără schimbare, ordonate după numărul de trenuri directe.</p>
           <div className="flex flex-wrap gap-2">
             {dests.map((d) => (
-              <Link key={d.slug} href={`/rute/${routeSlug(s.slug, d.slug)}`} className="rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">{d.name}</Link>
+              <Link key={d.slug} href={`/rute/${routeSlug(s.slug, d.slug)}`} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-card px-3 py-1.5 text-sm text-body hover:border-primary hover:text-primary">
+                {d.name}
+                <span className="tnum text-xs text-muted">{d.count}</span>
+              </Link>
             ))}
           </div>
         </>
