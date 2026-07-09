@@ -1,6 +1,6 @@
 // Statistici reale pentru o gară, calculate din orarul oficial (fără date inventate).
 import { trains } from "@/data/trains";
-import { stationBySlug, stationRank } from "@/data/stations";
+import { stationBySlug } from "@/data/stations";
 import { operatorBySlug } from "@/data/operators";
 import { timeToMin } from "@/lib/schedule";
 import type { DayKey } from "@/lib/types";
@@ -23,36 +23,28 @@ export interface StationStats {
 export interface DestCount { slug: string; name: string; count: number; }
 
 /**
- * Toate destinațiile directe dintr-o gară (orice gară în aval, pe orice tren care pleacă de aici),
- * ordonate: 1) după numărul de trenuri directe către ea (desc); apoi, la egalitate,
- * 2) gările mari întâi; 3) alfabetic. Un tren numără o singură dată per destinație.
+ * Destinații populare dintr-o gară: doar destinațiile FINALE (capătul trenului)
+ * și doar orașele mari (gări principale), numărate după câte trenuri directe se termină acolo.
+ * Ordine: număr de trenuri desc, apoi alfabetic. Nu includem gările de tranzit/haltele.
  */
-export function directDestinationsRanked(slug: string): DestCount[] {
+export function popularDestinations(slug: string): DestCount[] {
   if (!stationBySlug(slug)) return [];
   const counts = new Map<string, number>();
   for (const t of trains) {
     const i = t.stops.findIndex((s) => s.stationSlug === slug);
-    if (i === -1) continue;
-    const seen = new Set<string>();
-    for (let k = i + 1; k < t.stops.length; k++) {
-      const ds = t.stops[k].stationSlug;
-      if (ds === slug || seen.has(ds)) continue;
-      seen.add(ds);
-      counts.set(ds, (counts.get(ds) ?? 0) + 1);
-    }
+    if (i === -1 || i === t.stops.length - 1) continue; // trenul trebuie să plece de aici
+    const terminus = t.stops[t.stops.length - 1].stationSlug;
+    if (terminus === slug) continue;
+    counts.set(terminus, (counts.get(terminus) ?? 0) + 1);
   }
-  const arr: (DestCount & { rank: number })[] = [];
+  const arr: DestCount[] = [];
   for (const [ds, count] of counts) {
     const st = stationBySlug(ds);
-    if (!st) continue;
-    arr.push({ slug: ds, name: st.name, count, rank: stationRank(st) });
+    if (!st || !st.isMajor) continue; // doar orașe mari
+    arr.push({ slug: ds, name: st.name, count });
   }
-  arr.sort((a, b) =>
-    b.count - a.count ||
-    a.rank - b.rank ||
-    a.name.localeCompare(b.name, "ro"),
-  );
-  return arr.map(({ slug, name, count }) => ({ slug, name, count }));
+  arr.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "ro"));
+  return arr;
 }
 
 export function stationStats(slug: string): StationStats {
