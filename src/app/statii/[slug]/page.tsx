@@ -69,7 +69,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       </div>
 
       <div className="mt-4">
-        <Board rows={tab === "plecari" ? dep : arr} mode={tab === "plecari" ? "departures" : "arrivals"} />
+        <Board rows={tab === "plecari" ? dep : arr} mode={tab === "plecari" ? "departures" : "arrivals"} windowed />
       </div>
 
       <div className="mt-4 flex gap-3 text-sm">
