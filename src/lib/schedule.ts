@@ -1,5 +1,5 @@
 import { trains, trainBySlug } from "@/data/trains";
-import { stationBySlug } from "@/data/stations";
+import { stationBySlug, stations } from "@/data/stations";
 import { operatorBySlug } from "@/data/operators";
 import { tariffPrice } from "@/data/tariff";
 import type {
@@ -239,11 +239,117 @@ export function searchConnections(fromSlug: string, toSlug: string, dateISO: str
   return [...seen.values()].sort((a, b) => a.totalDurationMin - b.totalDurationMin).slice(0, 6);
 }
 
+// ---------- Căutare cu 2 schimbări (prin noduri mari) ----------
+// Doar ca ultimă soluție, pentru perechi fără direct și fără conexiune cu o schimbare
+// (ex. Drobeta → Bacău). Rutăm doar prin gări MARI ca să rămână rapid.
+const MAJOR_HUBS = new Set(stations.filter((s) => s.isMajor).map((s) => s.slug));
+// Trasee lungi cu 2 schimbări au adesea așteptări mai mari la nod → fereastră mai permisivă.
+const MAX_CONNECTION2_MIN = 300;
+
+export function searchConnections2(fromSlug: string, toSlug: string, dateISO: string): SearchResult[] {
+  const day = dayKeyOf(dateISO);
+
+  // from → H1 (H1 = nod mare) și H2 → to (H2 = nod mare), directe
+  const firstLegs = new Map<string, Leg[]>();
+  const lastLegs = new Map<string, Leg[]>();
+  for (const t of trains) {
+    if (!t.runsDays.includes(day)) continue;
+    const iF = stopIndex(t, fromSlug);
+    if (iF !== -1) {
+      for (let k = iF + 1; k < t.stops.length; k++) {
+        const h = t.stops[k].stationSlug;
+        if (h === toSlug || !MAJOR_HUBS.has(h)) continue;
+        const leg = legFromTrain(t, fromSlug, h);
+        if (leg) { const a = firstLegs.get(h) ?? []; a.push(leg); firstLegs.set(h, a); }
+      }
+    }
+    const jT = stopIndex(t, toSlug);
+    if (jT > 0) {
+      for (let k = 0; k < jT; k++) {
+        const h = t.stops[k].stationSlug;
+        if (h === fromSlug || !MAJOR_HUBS.has(h)) continue;
+        const leg = legFromTrain(t, h, toSlug);
+        if (leg) { const a = lastLegs.get(h) ?? []; a.push(leg); lastLegs.set(h, a); }
+      }
+    }
+  }
+  if (firstLegs.size === 0 || lastLegs.size === 0) return [];
+  const firstHubs = new Set(firstLegs.keys());
+  const lastHubs = new Set(lastLegs.keys());
+
+  // mijloc: H1 → H2 (ambele noduri mari care apar în first/last)
+  const midLegs = new Map<string, Leg[]>();
+  for (const t of trains) {
+    if (!t.runsDays.includes(day)) continue;
+    for (let a = 0; a < t.stops.length; a++) {
+      const h1 = t.stops[a].stationSlug;
+      if (!firstHubs.has(h1)) continue;
+      for (let b = a + 1; b < t.stops.length; b++) {
+        const h2 = t.stops[b].stationSlug;
+        if (h2 === h1 || !lastHubs.has(h2)) continue;
+        const leg = legFromTrain(t, h1, h2);
+        if (leg) { const key = `${h1}>${h2}`; const arr = midLegs.get(key) ?? []; arr.push(leg); midLegs.set(key, arr); }
+      }
+    }
+  }
+
+  const out: SearchResult[] = [];
+  for (const [h1, aLegs] of firstLegs) {
+    for (const [h2, cLegs] of lastLegs) {
+      if (h1 === h2) continue;
+      const mid = midLegs.get(`${h1}>${h2}`);
+      if (!mid) continue;
+      for (const a of aLegs) {
+        for (const b of mid) {
+          if (b.train.slug === a.train.slug) continue;
+          const w1 = timeToMin(b.depTime) - timeToMin(a.arrTime);
+          if (w1 < MIN_CONNECTION_MIN || w1 > MAX_CONNECTION2_MIN) continue;
+          for (const c of cLegs) {
+            if (c.train.slug === b.train.slug || c.train.slug === a.train.slug) continue;
+            const w2 = timeToMin(c.depTime) - timeToMin(b.arrTime);
+            if (w2 < MIN_CONNECTION_MIN || w2 > MAX_CONNECTION2_MIN) continue;
+            const total = durationBetween(a.depTime, c.arrTime);
+            const t1 = trainBySlug(a.train.slug)!, tm = trainBySlug(b.train.slug)!, t3 = trainBySlug(c.train.slug)!;
+            const km = kmBetween(t1, fromSlug, h1) + kmBetween(tm, h1, h2) + kmBetween(t3, h2, toSlug);
+            const allCfr = a.train.operatorSlug === "cfr-calatori" && b.train.operatorSlug === "cfr-calatori" && c.train.operatorSlug === "cfr-calatori";
+            out.push({
+              type: "connection",
+              legs: [a, b, c],
+              depTime: a.depTime,
+              arrTime: c.arrTime,
+              totalDurationMin: total,
+              changesCount: 2,
+              distanceKm: km,
+              operatorSlug: a.train.operatorSlug,
+              badges: [],
+              priceFrom: allCfr ? { amount: estimatePrice(km, "IR"), currency: "RON" as const, estimated: true } : { amount: null, currency: "RON" as const, estimated: false },
+              ticketUrl: ticketUrl(a.train.operatorSlug, a.fromName, c.toName, dateISO),
+              status: mockStatus(a.train.slug, dateISO),
+            });
+          }
+        }
+      }
+    }
+  }
+
+  const seen = new Map<string, SearchResult>();
+  for (const r of out) {
+    const key = r.legs.map((l) => l.train.slug).join(">");
+    const prev = seen.get(key);
+    if (!prev || r.totalDurationMin < prev.totalDurationMin) seen.set(key, r);
+  }
+  return [...seen.values()].sort((a, b) => a.totalDurationMin - b.totalDurationMin).slice(0, 4);
+}
+
 // ---------- Căutare combinată + badge-uri ----------
 export function search(fromSlug: string, toSlug: string, dateISO: string) {
   if (fromSlug === toSlug) return { direct: [], connections: [], all: [] };
   const direct = searchDirect(fromSlug, toSlug, dateISO);
-  const connections = direct.length >= 3 ? [] : searchConnections(fromSlug, toSlug, dateISO);
+  let connections = direct.length >= 3 ? [] : searchConnections(fromSlug, toSlug, dateISO);
+  // Ultimă soluție: dacă nu există nici direct, nici conexiune cu o schimbare, încercăm 2 schimbări.
+  if (direct.length === 0 && connections.length === 0) {
+    connections = searchConnections2(fromSlug, toSlug, dateISO);
+  }
   const all = [...direct, ...connections];
   if (all.length) {
     // fastest

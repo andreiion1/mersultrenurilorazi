@@ -30,3 +30,24 @@ export function routeWaypoints(fromSlug: string, toSlug: string): Waypoint[] {
   }
   return out;
 }
+
+/**
+ * Waypoint-urile pentru o călătorie cu schimbări: concatenează traseul fiecărui segment
+ * (origine → nod de schimb → … → destinație). `transfers` = numele gărilor de schimb,
+ * ca să le putem evidenția pe hartă.
+ */
+export function connectionWaypoints(legs: { fromSlug: string; toSlug: string }[]): { points: Waypoint[]; transfers: string[] } {
+  const points: Waypoint[] = [];
+  const transfers: string[] = [];
+  legs.forEach((leg, idx) => {
+    const wp = routeWaypoints(leg.fromSlug, leg.toSlug);
+    if (wp.length === 0) return;
+    if (idx > 0) transfers.push(wp[0].name);
+    for (const p of wp) {
+      const last = points[points.length - 1];
+      if (last && last.lat === p.lat && last.lng === p.lng) continue; // evită dublarea nodului comun
+      points.push(p);
+    }
+  });
+  return { points, transfers };
+}

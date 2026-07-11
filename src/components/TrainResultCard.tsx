@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import type { SearchResult } from "@/lib/types";
-import { formatDuration } from "@/lib/timeUtils";
+import { formatDuration, timeToMin } from "@/lib/timeUtils";
 import { operatorBySlug } from "@/data/operators";
 import { InfoBadge, CategoryTag } from "./Badges";
 import { StatusBadge, statusBarClass } from "./StatusBadge";
@@ -35,7 +36,6 @@ function TimeDisplay({ time, delayedTime }: { time: string; delayedTime?: string
 export function TrainResultCard({ r, date }: { r: SearchResult; date?: string }) {
   const op = operatorBySlug(r.operatorSlug);
   const first = r.legs[0];
-  const last = r.legs[r.legs.length - 1];
   const isDelayed = r.status.state === "delayed";
   const isCancelled = r.status.state === "cancelled";
   const delayedDep = isDelayed ? addMinutes(r.depTime, r.status.delayMin) : undefined;
@@ -87,11 +87,13 @@ export function TrainResultCard({ r, date }: { r: SearchResult; date?: string })
             </Link>
           ) : (
             <span className="flex flex-wrap items-center gap-1.5 text-sm">
-              <CategoryTag category={first.train.category} />
-              <Link href={`/tren/${first.train.slug}`} className="hover:underline" style={{ color: "var(--text-strong)", fontWeight: 500 }}>{first.train.number}</Link>
-              <span style={{ color: "var(--text-muted)" }}>&rarr; schimb la {first.toName} &rarr;</span>
-              <CategoryTag category={last.train.category} />
-              <Link href={`/tren/${last.train.slug}`} className="hover:underline" style={{ color: "var(--text-strong)", fontWeight: 500 }}>{last.train.number}</Link>
+              {r.legs.map((l, idx) => (
+                <Fragment key={idx}>
+                  {idx > 0 && <span style={{ color: "var(--text-muted)" }}>&rarr; schimb la {l.fromName} &rarr;</span>}
+                  <CategoryTag category={l.train.category} />
+                  <Link href={`/tren/${l.train.slug}`} className="hover:underline" style={{ color: "var(--text-strong)", fontWeight: 500 }}>{l.train.number}</Link>
+                </Fragment>
+              ))}
             </span>
           )}
           {op ? (
@@ -147,19 +149,31 @@ export function TrainResultCard({ r, date }: { r: SearchResult; date?: string })
       {r.type === "connection" && (
         <div className="px-4 py-3 text-xs" style={{ borderTop: "1px solid var(--border)", backgroundColor: "rgba(0,0,0,0.02)", color: "var(--text-muted)" }}>
           <ol className="space-y-1.5">
-            {r.legs.map((l, i) => (
-              <li key={i} className="flex items-center gap-2 tnum">
-                <span className="font-semibold" style={{ color: "var(--text-default)" }}>{l.depTime}</span>
-                <span>{l.fromName}</span>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14m-7-7 7 7-7 7" />
-                </svg>
-                <span className="font-semibold" style={{ color: "var(--text-default)" }}>{l.arrTime}</span>
-                <span>{l.toName}</span>
-                <CategoryTag category={l.train.category} />
-                <Link href={`/tren/${l.train.slug}`} className="font-semibold hover:underline" style={{ color: "var(--text-default)" }}>{l.train.number}</Link>
-              </li>
-            ))}
+            {r.legs.map((l, i) => {
+              const raw = i < r.legs.length - 1 ? timeToMin(r.legs[i + 1].depTime) - timeToMin(l.arrTime) : null;
+              const waitMin = raw == null ? null : ((raw % 1440) + 1440) % 1440;
+              return (
+                <Fragment key={i}>
+                  <li className="flex flex-wrap items-center gap-2 tnum">
+                    <span className="font-semibold" style={{ color: "var(--text-default)" }}>{l.depTime}</span>
+                    <span>{l.fromName}</span>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M5 12h14m-7-7 7 7-7 7" />
+                    </svg>
+                    <span className="font-semibold" style={{ color: "var(--text-default)" }}>{l.arrTime}</span>
+                    <span>{l.toName}</span>
+                    <CategoryTag category={l.train.category} />
+                    <Link href={`/tren/${l.train.slug}`} className="font-semibold hover:underline" style={{ color: "var(--text-default)" }}>{l.train.number}</Link>
+                  </li>
+                  {waitMin != null && (
+                    <li className="flex items-center gap-1.5 pl-1" style={{ color: "var(--color-warning)" }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                      <span>schimb la {l.toName} &middot; așteptare {formatDuration(waitMin)}</span>
+                    </li>
+                  )}
+                </Fragment>
+              );
+            })}
           </ol>
         </div>
       )}

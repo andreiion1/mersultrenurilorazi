@@ -65,7 +65,8 @@ function densify(points: Pt[]): [number, number][] {
   return out;
 }
 
-export function RouteAnimatedMap({ points }: { points: Pt[] }) {
+export function RouteAnimatedMap({ points, highlight = [] }: { points: Pt[]; highlight?: string[] }) {
+  const highlightSet = new Set(highlight);
   const elRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapRef = useRef<any>(null);
@@ -92,10 +93,16 @@ export function RouteAnimatedMap({ points }: { points: Pt[] }) {
       const latlngs: [number, number][] = points.map((p) => [p.lat, p.lng]);
       map.fitBounds(latlngs, { padding: [42, 42] });
 
-      // opriri intermediare (puncte mici)
+      // opriri intermediare (puncte mici); nodurile de schimb — evidențiate cu etichetă permanentă
       for (let k = 1; k < points.length - 1; k++) {
-        L.circleMarker([points[k].lat, points[k].lng], { radius: 3, color: AMBER, weight: 1.5, fillColor: "#fff", fillOpacity: 1 })
-          .bindTooltip(points[k].name, { direction: "top" }).addTo(map);
+        const isTransfer = highlightSet.has(points[k].name);
+        if (isTransfer) {
+          L.circleMarker([points[k].lat, points[k].lng], { radius: 6, color: "#fff", weight: 2, fillColor: AMBER, fillOpacity: 1 })
+            .bindTooltip(`Schimb: ${points[k].name}`, { permanent: true, direction: "top", className: "route-lbl" }).addTo(map);
+        } else {
+          L.circleMarker([points[k].lat, points[k].lng], { radius: 3, color: AMBER, weight: 1.5, fillColor: "#fff", fillOpacity: 1 })
+            .bindTooltip(points[k].name, { direction: "top" }).addTo(map);
+        }
       }
       // capete: plecare + sosire cu etichetă
       const first = points[0], last = points[points.length - 1];

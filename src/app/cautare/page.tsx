@@ -70,6 +70,16 @@ export default async function SearchPage({ searchParams }: Props) {
 
           {result.all.length > 0 ? (
             <>
+              {result.direct.length === 0 && result.connections.length > 0 && (
+                <div className="mb-3 flex items-start gap-2 rounded-md border p-3 text-sm" style={{ borderColor: "var(--color-warning)", backgroundColor: "var(--color-warning-bg, rgba(217,119,6,0.08))", color: "var(--text-body)" }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><path d="M12 9v4M12 17h.01" />
+                  </svg>
+                  <p>
+                    Nu există tren <strong>direct</strong> {from!.name} → {to!.name}, dar se poate ajunge {result.connections[0].changesCount === 1 ? "cu o schimbare" : `cu ${result.connections[0].changesCount} schimbări`}. Variantele de mai jos includ gările de schimb și timpul de așteptare.
+                  </p>
+                </div>
+              )}
               <p className="mb-3 text-sm text-muted tnum">
                 {result.direct.length} directe{result.connections.length ? ` · ${result.connections.length} cu schimbare` : ""} ·
                 cel mai rapid {formatDuration(fastest)} · de la {cheapest.toFixed(1)} lei
@@ -97,8 +107,8 @@ export default async function SearchPage({ searchParams }: Props) {
             </>
           ) : (
             <div className="rounded-md border border-line bg-card p-6 text-center">
-              <p className="font-medium text-strong">Nu am găsit trenuri pentru această rută la data aleasă.</p>
-              <p className="mt-1 text-sm text-muted">Încearcă altă dată sau verifică o rută din apropiere. Alternativ, poți lua în calcul autocarul.</p>
+              <p className="font-medium text-strong">Nu am găsit o legătură cu trenul în aceeași zi pe această rută.</p>
+              <p className="mt-1 text-sm text-muted">Nici direct, nici cu schimbări rezonabile. Traseul poate necesita o oprire peste noapte sau altă zi. Încearcă altă dată sau ia în calcul autocarul.</p>
               <Link href="/rute" className="mt-3 inline-block text-sm font-medium text-primary hover:underline">Vezi rute disponibile</Link>
             </div>
           )}

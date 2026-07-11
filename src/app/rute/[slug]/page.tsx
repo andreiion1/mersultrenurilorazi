@@ -11,7 +11,7 @@ import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { RouteAnimatedMap } from "@/components/RouteAnimatedMap";
-import { routeWaypoints } from "@/lib/routePath";
+import { routeWaypoints, connectionWaypoints } from "@/lib/routePath";
 import { getRouteBySlug, getAllDirectRoutes } from "@/data/routes";
 import { search, todayISO, tomorrowISO, formatDuration } from "@/lib/schedule";
 import { applyView, parseSort, parseDirectOnly, parseDateParam, parseOperator } from "@/lib/resultsView";
@@ -52,9 +52,6 @@ export default async function Page({ params, searchParams }: Props) {
   const r = getRouteBySlug(slug);
   if (!r) notFound();
 
-  const routePts = routeWaypoints(r.fromSlug, r.toSlug);
-  const showRouteMap = routePts.length >= 2;
-
   const today = todayISO();
   const tomorrow = tomorrowISO();
   const date = parseDateParam(sp.data, today);
@@ -68,6 +65,14 @@ export default async function Page({ params, searchParams }: Props) {
     .sort((a, b) => a.name.localeCompare(b.name, "ro"));
   const list = applyView(result.all, sort, directOnly, operator);
   const fastest = result.all.length ? Math.min(...result.all.map((x) => x.totalDurationMin)) : 0;
+
+  // Hartă: traseul direct dacă există; altfel traseul celei mai bune conexiuni (cu noduri de schimb evidențiate).
+  const hasDirectToday = result.direct.length > 0;
+  const bestConn = !hasDirectToday ? result.connections[0] : undefined;
+  const conn = bestConn ? connectionWaypoints(bestConn.legs) : { points: [], transfers: [] };
+  const routePts = hasDirectToday ? routeWaypoints(r.fromSlug, r.toSlug) : conn.points;
+  const mapTransfers = hasDirectToday ? [] : conn.transfers;
+  const showRouteMap = routePts.length >= 2;
 
   const dateLabel =
     date === today ? "azi" :
@@ -100,9 +105,20 @@ export default async function Page({ params, searchParams }: Props) {
         <Stat label="Operatori" value={r.operators.join(", ") || "-"} />
       </div>
 
+      {!hasDirectToday && result.connections.length > 0 && (
+        <div className="mt-4 flex items-start gap-2 rounded-md border p-3 text-sm" style={{ borderColor: "var(--color-warning)", backgroundColor: "var(--color-warning-bg, rgba(217,119,6,0.08))", color: "var(--text-body)" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}>
+            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><path d="M12 9v4M12 17h.01" />
+          </svg>
+          <p>
+            Nu există tren <strong>direct</strong> pe ruta {r.fromCity}–{r.toCity}, dar se poate ajunge {result.connections[0].changesCount === 1 ? "cu o schimbare" : `cu ${result.connections[0].changesCount} schimbări`}. Vezi mai jos variantele, cu gările de schimb și timpul de așteptare, iar pe hartă traseul de la plecare, prin nodul de schimb, până la destinație.
+          </p>
+        </div>
+      )}
+
       {showRouteMap && (
         <div className="mt-6">
-          <RouteAnimatedMap points={routePts} />
+          <RouteAnimatedMap points={routePts} highlight={mapTransfers} />
         </div>
       )}
 
@@ -134,7 +150,7 @@ export default async function Page({ params, searchParams }: Props) {
           <p className="rounded-md border border-line bg-card p-6 text-center text-muted">
             {directOnly && result.all.length > 0
               ? "Nu există trenuri directe la această dată. Vezi variantele cu schimbare dezactivând filtrul."
-              : `Nu circulă trenuri pe această rută ${dateLabel}. Alege altă dată.`}
+              : `Nu am găsit o legătură cu trenul în aceeași zi pe ruta ${r.fromCity}–${r.toCity} ${dateLabel}, nici cu schimbări rezonabile. Traseul poate necesita o oprire peste noapte sau altă zi. Alternativ, ia în calcul autocarul.`}
           </p>
         )}
       </div>
