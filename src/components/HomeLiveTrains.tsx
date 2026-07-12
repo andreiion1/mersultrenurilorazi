@@ -107,7 +107,8 @@ export function HomeLiveTrains() {
       if (cancelled || !elRef.current) return;
       const L = window.L;
       if (!mapRef.current) {
-        const map = L.map(elRef.current, { zoomControl: false, attributionControl: true, scrollWheelZoom: false, dragging: true });
+        // Preview needraggabil: pe mobil, scroll-ul cu un deget trece la pagină, nu la hartă.
+        const map = L.map(elRef.current, { zoomControl: false, attributionControl: true, scrollWheelZoom: false, dragging: false, touchZoom: false });
         mapRef.current = map;
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "&copy; OpenStreetMap", maxZoom: 12 }).addTo(map);
         map.fitBounds([[43.6, 20.2], [48.3, 29.7]], { padding: [10, 10] });
@@ -147,7 +148,7 @@ export function HomeLiveTrains() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <div className="relative overflow-hidden rounded-xl border border-line" style={{ isolation: "isolate" }}>
-            <div ref={elRef} className="h-[280px] w-full bg-subtle md:h-[340px]" />
+            <div ref={elRef} className="h-[280px] w-full bg-subtle md:h-[340px]" style={{ touchAction: "pan-y" }} />
             <div className="pointer-events-none absolute left-3 top-3 z-[400] flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
               style={{ backgroundColor: "rgba(6,17,39,0.82)", color: "#fff" }}>
               <span className="relative flex h-2 w-2">
