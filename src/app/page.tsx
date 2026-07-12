@@ -7,6 +7,7 @@ import { getPopularRoutes } from "@/data/routes";
 import { majorStations } from "@/data/stations";
 import { departures, arrivals, todayISO } from "@/lib/schedule";
 import { DeparturesBoard, type BoardStation } from "@/components/DeparturesBoard";
+import { HomeLiveTrains } from "@/components/HomeLiveTrains";
 
 // Homepage: canonical pe propriul URL (rădăcina). Titlul rămâne cel implicit din layout.
 export const metadata: Metadata = {
@@ -102,6 +103,10 @@ export default function HomePage() {
           </div>
         </Container>
       </section>
+
+      <Container className="py-8">
+        <HomeLiveTrains />
+      </Container>
 
       <Container className="py-8">
         <div className="mb-4 flex items-center justify-between">
