@@ -33,6 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ro" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#061127" />
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3699715832199836"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="font-sans antialiased">
         <JsonLd data={websiteSchema()} />
