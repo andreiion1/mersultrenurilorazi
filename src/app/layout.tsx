@@ -4,8 +4,6 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
-import { CookieConsent } from "@/components/CookieConsent";
-import { Analytics } from "@/components/Analytics";
 import { JsonLd } from "@/components/JsonLd";
 import { websiteSchema, SITE } from "@/lib/seo";
 
@@ -33,12 +31,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ro" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#061127" />
-        {/* Google AdSense */}
+        {/* Google Consent Mode — implicit „denied", ÎNAINTE de AdSense/GA.
+            CMP-ul certificat Google (via AdSense) actualizează consimțământul pentru UE. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}" +
+              "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});" +
+              "gtag('js',new Date());gtag('config','G-75E5MBPTYM',{anonymize_ip:true});",
+          }}
+        />
+        {/* Google AdSense (include mesajul de consimțământ CMP pentru UE) */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3699715832199836"
           crossOrigin="anonymous"
         />
+        {/* Google Analytics — respectă Consent Mode de mai sus */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-75E5MBPTYM" />
       </head>
       <body className="font-sans antialiased">
         <JsonLd data={websiteSchema()} />
@@ -46,8 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-[60vh] pb-20 lg:pb-0">{children}</main>
         <Footer />
         <BottomNav />
-        <CookieConsent />
-        <Analytics />
       </body>
     </html>
   );
