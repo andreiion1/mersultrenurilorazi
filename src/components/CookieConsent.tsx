@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getConsent, setConsent, CONSENT_OPEN_EVENT } from "@/lib/consent";
+import { getConsent, setConsent, updateConsentMode, CONSENT_OPEN_EVENT } from "@/lib/consent";
 
 export function CookieConsent() {
   const [open, setOpen] = useState(false);
@@ -10,8 +10,10 @@ export function CookieConsent() {
   const [analytics, setAnalytics] = useState(false);
 
   useEffect(() => {
-    // arată bannerul dacă nu s-a decis încă
-    if (!getConsent()) setOpen(true);
+    // arată bannerul dacă nu s-a decis încă; altfel aplică alegerea salvată în Consent Mode
+    const stored = getConsent();
+    if (!stored) setOpen(true);
+    else updateConsentMode(stored.analytics);
     const reopen = () => {
       const c = getConsent();
       setAnalytics(c?.analytics ?? false);

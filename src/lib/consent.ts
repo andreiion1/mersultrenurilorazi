@@ -37,6 +37,22 @@ export function setConsent(analytics: boolean) {
   } catch {
     /* private mode / quota — ignorăm */
   }
+  updateConsentMode(analytics);
+}
+
+/** Trimite alegerea către Google Consent Mode (GA + AdSense). */
+export function updateConsentMode(analytics: boolean) {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+  if (typeof w.gtag === "function") {
+    const v = analytics ? "granted" : "denied";
+    w.gtag("consent", "update", {
+      ad_storage: v,
+      ad_user_data: v,
+      ad_personalization: v,
+      analytics_storage: v,
+    });
+  }
 }
 
 export function hasAnalyticsConsent(): boolean {
