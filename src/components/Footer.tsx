@@ -109,7 +109,7 @@ export function Footer() {
       </Container>
 
       <div style={{ borderTop: "0.5px solid rgba(255,255,255,0.08)" }}>
-        <Container className="flex flex-wrap items-center justify-between gap-3 py-4">
+        <Container className="flex flex-wrap items-center justify-between gap-3 pt-4 pb-24 lg:pb-4">
           <div className="flex items-center gap-2">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
